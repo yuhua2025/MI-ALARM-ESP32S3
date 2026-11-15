@@ -1,0 +1,16 @@
+# 小米闹钟 ESP32-S3  v4.1  固件与源码快照
+备份时间: 2026-11-15 18:35:45 +0800
+设备: 192.168.8.129  MAC dc:b4:d9:37:10:20  串口 /dev/cu.usbmodem21101
+烧录方式: app @ 0x10000（保留 NVS），merged @ 0x0（清空 NVS）
+
+## 回滚（把闹钟刷回来）
+sh "/Volumes/macmini/DIY/小米闹钟/MI-ALARM-ESP32S3/ESP32S3-PCB/ino/flash.sh" /dev/cu.usbmodem21101          # 用工程目录里的 app
+# 或直接用本备份：
+python3 -m esptool --chip esp32s3 -p /dev/cu.usbmodem21101 -b 921600 \
+  write-flash 0x10000 "/Volumes/macmini/DIY/小米闹钟/MI-ALARM-ESP32S3/firmware_backup/v4.1_20261115_1834/XiaoMiClock_v4.1_esp32s3_app.bin"
+# 全片恢复（会清 WiFi/设置）：
+python3 -m esptool --chip esp32s3 -p /dev/cu.usbmodem21101 -b 921600 \
+  write-flash 0x0 "/Volumes/macmini/DIY/小米闹钟/MI-ALARM-ESP32S3/firmware_backup/v4.1_20261115_1834/XiaoMiClock_v4.1_esp32s3_merged.bin"
+
+## 校验
+cd "/Volumes/macmini/DIY/小米闹钟/MI-ALARM-ESP32S3/firmware_backup/v4.1_20261115_1834" && shasum -a 256 -c SHA256SUMS

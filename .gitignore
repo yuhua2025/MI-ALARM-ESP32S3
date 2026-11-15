@@ -1,0 +1,17 @@
+# 助手私有记忆 / macOS 系统文件（只忽略，不删除）
+.workbuddy/
+.DS_Store
+**/.DS_Store
+
+# Arduino 编译中间产物：只保留 v4.1 的两个发布 bin 与校验清单
+ESP32S3-PCB/ino/build/*
+!ESP32S3-PCB/ino/build/XiaoMiClock_v4.1_esp32s3_app.bin
+!ESP32S3-PCB/ino/build/XiaoMiClock_v4.1_esp32s3_merged.bin
+!ESP32S3-PCB/ino/build/SHA256SUMS
+
+# 通用构建产物
+*.o
+*.elf
+*.map
+*.d
+core/

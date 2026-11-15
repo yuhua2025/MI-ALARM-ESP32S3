@@ -1,0 +1,139 @@
+{
+  "device": "192.168.8.129",
+  "host": "192.168.8.100",
+  "initial": "OK tx=80 dbm=20.00 ps=0 psname=NONE rssi=-66 ch=11 ssid=Home ip=192.168.8.129 legacy=0 best=0 err=0",
+  "policy": "coverage",
+  "rows": [
+    {
+      "dbm": 8,
+      "quarter": 32,
+      "set": "OK set=32 actual=32 dbm=8.00 err=0",
+      "actual_dbm": 8.0,
+      "rssi": -65,
+      "ps": "NONE",
+      "burst": {
+        "ack": "OK sent=150/150",
+        "sent": 150,
+        "received": 150,
+        "rate": 100.0,
+        "dup": 0,
+        "out_of_order": 0
+      },
+      "ping": {
+        "loss": 0.0,
+        "avg": 9.52
+      }
+    },
+    {
+      "dbm": 11,
+      "quarter": 44,
+      "set": "OK set=44 actual=44 dbm=11.00 err=0",
+      "actual_dbm": 11.0,
+      "rssi": -67,
+      "ps": "NONE",
+      "burst": {
+        "ack": "OK sent=150/150",
+        "sent": 150,
+        "received": 150,
+        "rate": 100.0,
+        "dup": 0,
+        "out_of_order": 0
+      },
+      "ping": {
+        "loss": 0.0,
+        "avg": 7.748
+      }
+    },
+    {
+      "dbm": 14,
+      "quarter": 56,
+      "set": "OK set=56 actual=56 dbm=14.00 err=0",
+      "actual_dbm": 14.0,
+      "rssi": -66,
+      "ps": "NONE",
+      "burst": {
+        "ack": "OK sent=150/150",
+        "sent": 150,
+        "received": 150,
+        "rate": 100.0,
+        "dup": 0,
+        "out_of_order": 0
+      },
+      "ping": {
+        "loss": 0.0,
+        "avg": 4.76
+      }
+    },
+    {
+      "dbm": 17,
+      "quarter": 68,
+      "set": "OK set=68 actual=68 dbm=17.00 err=0",
+      "actual_dbm": 17.0,
+      "rssi": -68,
+      "ps": "NONE",
+      "burst": {
+        "ack": "OK sent=150/150",
+        "sent": 150,
+        "received": 150,
+        "rate": 100.0,
+        "dup": 0,
+        "out_of_order": 0
+      },
+      "ping": {
+        "loss": 0.0,
+        "avg": 3.784
+      }
+    },
+    {
+      "dbm": 20,
+      "quarter": 80,
+      "set": "OK set=80 actual=80 dbm=20.00 err=0",
+      "actual_dbm": 20.0,
+      "rssi": -63,
+      "ps": "NONE",
+      "burst": {
+        "ack": "OK sent=150/150",
+        "sent": 150,
+        "received": 150,
+        "rate": 100.0,
+        "dup": 0,
+        "out_of_order": 0
+      },
+      "ping": {
+        "loss": 0.0,
+        "avg": 4.076
+      }
+    }
+  ],
+  "ps_compare": {
+    "MAX_MODEM(旧默认 LOW_POWER)": {
+      "set": "OK ps=2 MAX_MODEM err=0",
+      "loss": 0.0,
+      "avg": 389.373
+    },
+    "NONE(修复后)": {
+      "set": "OK ps=0 NONE err=0",
+      "loss": 0.0,
+      "avg": 5.427
+    }
+  },
+  "qualified_dbms": [
+    8,
+    11,
+    14,
+    17,
+    20
+  ],
+  "recommend": {
+    "dbm": 20,
+    "quarter": 80,
+    "reason": "所有档位均零丢包/上行 100%，取最高合格档：RSSI 实测会瞬时跌到 -79 dBm，插电设备需要链路余量；且最高档未出现丢包或 RTT 劣化，说明本板供电/去耦能承受满功率"
+  },
+  "top_vs_low": {
+    "low_burst": 100.0,
+    "top_burst": 100.0,
+    "low_ping": 9.52,
+    "top_ping": 4.076
+  },
+  "applied": "OK saved=80 (20.00 dBm) committed"
+}
