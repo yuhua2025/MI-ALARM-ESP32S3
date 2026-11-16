@@ -7,6 +7,11 @@ set -e
 PROJ="/Volumes/macmini/DIY/xiaozhi-esp32"
 
 source "$HOME/esp/esp-idf/export.sh" >/dev/null 2>&1
+
+# managed_components 由 IDF 组件管理器托管，reconfigure 可能覆盖本地修改；
+# 每次构建前幂等重打「配网重试 3 次 / 8s」补丁
+python3 "$(dirname "$0")/patch_wifi_retry.py"
+
 cd "$PROJ"
 python3 -u scripts/build.py mi-alarm-tm1652 --language zh-CN
 

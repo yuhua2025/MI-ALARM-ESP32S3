@@ -431,5 +431,51 @@ NVS 分区读回：擦除后 `0xFF` 占 86.65%（重启后系统会重建 NVS �
 
 - UDP 3333 的 `FACTORY CONFIRM` 对局域网内任何主机开放；不需要远程维护时，
   删掉 `rf_tools.cc` 里该分支即可只保留按键触发。
-- `xiaozhi_port/firmware/nvs_backup_before_factory_test.bin` 含本机 Wi-Fi 凭据，
+- `xiaozhi_port/firmware/nvs_backup_*.bin` 含本机 Wi-Fi 凭据，
   已加入 `.gitignore`，**不要上传公开仓库或外传**。
+
+## 18:3x 恢复出厂后配网要两次才成功 —— 已修
+
+用户反馈：恢复出厂后第一次提交配网信息，设备没连上家里 Wi-Fi 又回配网模式，
+第二次再做才成功。定位到两个叠加原因：
+
+1. **APSTA 信道切换被路由器临时拒绝**（官方已注释的已知坑）。
+   配网提交时设备还在 AP 信道（~1），STA 要切到家里 AP 的信道（11），
+   立刻发关联请求；路由器回 `status=30 (Refused Temporarily)` + Comeback Time。
+   ESP-IDF 的 `failure_retry_cnt` 在毫秒级猛发重试、不等 Comeback Time，
+   第一次 `ConnectToWifi()` 就失败。而提交 handler 一失败就直接返回
+   `success:false`，**根本不调用 `Save()`**，凭据没写进 NVS，重启自然又回配网。
+   官方补丁只等 3s 重试一次，恢复出厂后路由器稳定得更慢，3s 仍不够。
+2. **恢复出厂把 `phy/cal_data` 一起擦了**。重启首次上电走 full calibration
+   （日志 `failed to load RF calibration data (0x1102)`），射频状态不稳，
+   正好撞进上面的 Comeback Time 窗口。
+
+### 修复
+
+- `factory_reset.cc`：擦 NVS 前用 `nvs_entry_find("phy")` 把 RF 校准数据
+  （`cal_data` / `cal_mac` / `cal_version`，本次实测 3 项）备份到 RAM，
+  `nvs_flash_erase()` 后 `nvs_flash_init()` 再写回。**只保留 phy，
+  Wi-Fi 凭据 / `rf_best` / 音量等业务设置仍全部清除**，恢复出厂语义不变。
+- `wifi_configuration_ap.cc`：`kMaxAttempts` 2→3、`kRetryDelayMs` 3000→8000。
+  组件在 `managed_components/` 由 IDF 托管，reconfigure 可能覆盖，
+  所以新增 `xiaozhi_port/patch_wifi_retry.py` 幂等补丁，并挂到 `build_zh.sh`
+  每次构建前自动重打（实测 reconfigure 后补丁仍在）。
+
+### 实测（恢复出厂 → 提交一次配网 → 连回 Home）
+
+- 恢复出厂串口：
+  `已备份 phy 校准数据 3 项` → `NVS erase -> 0` → `nvs_flash_init -> 0` →
+  `恢复 phy 校准数据 3 项 commit=0` → `esp_restart`。
+  重启后**没有** `failed to load RF calibration data`，直接
+  `phy_init: phy_version 712...` + `Starting config AP`。
+- 本机临时连 `Xiaozhi-1021`（`192.168.4.2`），真实 `POST /submit` 提交
+  `{"ssid":"Home",...}`：**`{"success":true}`，3 秒返回**，串口
+  `Connecting to WiFi Home (attempt 1/3)` → `Connected to WiFi Home, channel 11` →
+  `Save SSID Home channel 11` → `Connected to WiFi: Home`，**一次提交即成功**，
+  根本没用到第 2/3 次重试（说明保留校准数据后主因已消除，加长重试是兜底）。
+- 设备随后 `STAT` → `ssid=Home ip=192.168.8.129`；NVS 读回
+  `phy/cal_data/cal_version` 在、`wifi/ssid/Home/channel` 在，
+  `mi_alarm/rf_best`/`audio/output_volume` 不在（业务设置确实清了）。
+- app `2,088,384 B`，SHA-256 `fcbfa8d9…2e4`，烧录 `Hash verified`、
+  读回逐字节一致。归档 `*_factory_*.bin` + `SHA256SUMS` 已更新。
+- 本机 Wi-Fi 已恢复为未连接（测试前也是未连接，上网走有线 en0）。
