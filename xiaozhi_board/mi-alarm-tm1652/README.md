@@ -376,6 +376,15 @@ macOS `say -v Tingting` → `afconvert` 重采样成 16 kHz 单声道 WAV →
 Python `soundfile`(libsndfile 1.2.2) 写 Ogg Opus。macOS 自带 `afconvert` 虽列出
 `Oggf` + `opus`，实测写入一律 `ExtAudioFileWrite failed ('fmt?')`，不能用。
 
+**读音坑（已修正）**：直接写「重置成功」，Tingting 把「重」读成 **zhòng**，
+语音转录结果是「种志成功」。用户要的是 **chóng zhì**。改成同音字
+**「虫置成功」** 送 TTS 后，转录结果正确识别为「重置成功」。
+另外同音字版本编码后末尾多出一个 **2.5 ms 的 CELT 帧**，设备端
+`OggDemuxer::GetOpusPacketDurationMs()` 只接受时长为整毫秒的包，实测报
+`Unsupported Opus packet duration`。把 WAV 尾部补零到 320 样本（20 ms @16 kHz）
+的整数倍后，最后一包变成合法 10 ms，设备端零报错。
+最终资源 4,587 B，SHA-256 `ed7c7088…24e0`。
+
 产物放进 `main/assets/common/` 后由 CMake 的 `COMMON_SOUNDS` GLOB 自动嵌入 app，
 `gen_lang.py` 自动生成 `Lang::Sounds::OGG_RESET_SUCCESS`（引用 `_binary_reset_success_ogg_start`）。
 **坑**：官方 `add_custom_command()` 只依赖 `language.json`，新增 `.ogg` 不会触发
@@ -387,14 +396,14 @@ Python `soundfile`(libsndfile 1.2.2) 写 Ogg Opus。macOS 自带 `afconvert` 虽
 
 ### 实测（编译 → 烧录 → 真实串口 + UDP，2026-11-16）
 
-编译 `0 error / 0 warning`，app `2,086,656 B`，SHA-256 `b9405844…a47`；
+编译 `0 error / 0 warning`，app `2,086,784 B`，SHA-256 `5230b91a…c19`（读音修正后）；
 只烧 app @ `0x20000`，`Hash verified`，保留 NVS / 配网 / 中文 assets。
 
 | 步骤 | 实测结果 |
 | --- | --- |
 | 防误触 | UDP `FACTORY` → `ERR 需确认: FACTORY CONFIRM` |
 | 触发 | UDP `FACTORY CONFIRM` → `OK factory reset started` |
-| 语音 | `PlaySound(OGG_RESET_SUCCESS) ogg_bytes=4450`；`AudioService: Resampling audio from 16000 to 24000`；推入后 `idle=0` → `drained=1`，无 `OggDemuxer` 报错 |
+| 语音 | `PlaySound(OGG_RESET_SUCCESS) ogg_bytes=4587`；`AudioService: Resampling audio from 16000 to 24000`；推入后 `idle=0` → `drained=1`，**`OggDemuxer` 报错 0 条**；离线转录识别为「重置成功」 |
 | 擦除 | `nvs_flash_deinit -> 0 (ESP_OK)`、`NVS erase -> 0 (ESP_OK)` |
 | 重启 | `esp_restart` → `rst:0xc (RTC_SW_CPU_RST)` |
 | 清 Wi-Fi | `SsidManager: NVS namespace wifi doesn't exist`；`Starting config AP`；热点 `Xiaozhi-1021` / `192.168.4.1` |
@@ -414,8 +423,9 @@ NVS 分区读回：擦除后 `0xFF` 占 86.65%（重启后系统会重建 NVS �
 - **GPIO2 物理长按 5 秒**：自动化实测走的是 UDP 同一函数入口；物理按键路径已编译注册
   （开机日志 `GPIO2 长按 5000 ms = 恢复出厂`，Button 构造失败会直接 abort），
   但需要人手按住按键2 满 5 秒做最终确认。
-- **「重置成功」的听感**：串口能证明 Ogg 被解复用、16k→24k 重采样、解码队列排空，
-  本机没有录音设备做声学回放确认。
+- **「重置成功」的听感**：读音已用离线语音转录验证为「重置成功」（原版是「种志成功」），
+  串口证明 Ogg 被解复用、16k→24k 重采样、解码队列排空且无报错；
+  本机没有录音设备做最终声学回放确认。
 
 ### 安全提示
 
