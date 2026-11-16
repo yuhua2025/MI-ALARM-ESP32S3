@@ -28,8 +28,10 @@
 // ---- Buttons ----
 // GPIO0 是 BOOT/strapping：上电时不能按住，跑起来后当普通按键（低有效）
 #define BOOT_BUTTON_GPIO         GPIO_NUM_0
-// 第二按键，保留给后续「按下说话」用，本版未接 Button 对象
+// GPIO2 按键2：长按恢复出厂（清 Wi-Fi + 全部 NVS 设置，中文语音提示后重启）
+// 5 秒是为了防误触；GPIO2 不是 strapping 脚，运行时可安全占用。
 #define KEY2_BUTTON_GPIO         GPIO_NUM_2
+#define KEY2_FACTORY_RESET_HOLD_MS   5000
 
 // ---- LEDs: 两颗 WS2812B 串联 ----
 #define BUILTIN_LED_GPIO         GPIO_NUM_10

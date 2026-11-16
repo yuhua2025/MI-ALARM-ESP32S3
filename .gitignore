@@ -9,6 +9,9 @@ ESP32S3-PCB/ino/build/*
 !ESP32S3-PCB/ino/build/XiaoMiClock_v4.1_esp32s3_merged.bin
 !ESP32S3-PCB/ino/build/SHA256SUMS
 
+# 设备 NVS 备份含本机 Wi-Fi 凭据，禁止入库/外传
+**/nvs_backup_*.bin
+
 # 通用构建产物
 *.o
 *.elf

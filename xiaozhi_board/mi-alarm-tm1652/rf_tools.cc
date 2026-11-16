@@ -1,5 +1,6 @@
 #include "rf_tools.h"
 #include "config.h"
+#include "factory_reset.h"
 
 #include <esp_log.h>
 #include <esp_err.h>
@@ -182,7 +183,7 @@ static void RfTask(void* arg) {
         vTaskDelete(nullptr);
         return;
     }
-    ESP_LOGI(TAG, "[RF] UDP 测试服务已启动: 0.0.0.0:%d (STAT/TXP/PS/BURST/SAVE/CLR)", RF_PORT);
+    ESP_LOGI(TAG, "[RF] UDP 测试服务已启动: 0.0.0.0:%d (STAT/TXP/PS/BURST/SAVE/CLR/FACTORY)", RF_PORT);
 
     char buf[RF_BUFSZ];
     char reply[RF_BUFSZ];
@@ -246,9 +247,23 @@ static void RfTask(void* arg) {
             SaveBestTxPower(0);
             ClearLegacyTxPower();
             snprintf(reply, sizeof(reply), "OK cleared");
+        } else if (strcasecmp(cmd, "FACTORY") == 0) {
+            // 软件触发入口：与 GPIO2 长按调用同一个 MiAlarmFactoryReset()，
+            // 便于无人值守时用串口/网络验证整条链路（也方便后续远程维护）。
+            // 必须带 CONFIRM，避免误发一条 UDP 就把设备清空。
+            char confirm[32] = {0};
+            if (sscanf(buf, "%*s %31s", confirm) == 1 &&
+                strcasecmp(confirm, "CONFIRM") == 0) {
+                MiAlarmFactoryReset("UDP FACTORY CONFIRM");
+                snprintf(reply, sizeof(reply),
+                         "OK factory reset started: voice -> erase nvs -> reboot");
+            } else {
+                snprintf(reply, sizeof(reply),
+                         "ERR 需确认: FACTORY CONFIRM (会清除 Wi-Fi 与全部设置)");
+            }
         } else {
             snprintf(reply, sizeof(reply),
-                     "ERR unknown; STAT|TXP <q>|PS <0|1|2>|BURST <host> <port> <n> <ms>|SAVE <q>|CLR");
+                     "ERR unknown; STAT|TXP <q>|PS <0|1|2>|BURST <host> <port> <n> <ms>|SAVE <q>|CLR|FACTORY CONFIRM");
         }
 
         sendto(sock, reply, strlen(reply), 0, (struct sockaddr*)&cli, clen);

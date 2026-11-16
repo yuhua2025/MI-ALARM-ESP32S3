@@ -6,6 +6,7 @@
 #include "led/circular_strip.h"
 #include "tm1652_display.h"
 #include "rf_tools.h"
+#include "factory_reset.h"
 
 #include <esp_log.h>
 #include <esp_wifi.h>
@@ -19,10 +20,12 @@
  *   MAX98357 (GPIO7/8/9) + ICS-43434 (GPIO4/5/6) → 两路独立 I2S 直连
  *   2× WS2812B (GPIO10) → CircularStrip
  *   GPIO0 BOOT 按键 → 开机进配网 / 运行时切换对话
+ *   GPIO2 按键2 长按 5s → 恢复出厂（中文语音「重置成功」+ 清 NVS + 重启）
  */
 class MiAlarmTm1652Board : public WifiBoard {
 private:
     Button boot_button_;
+    Button key2_button_;
     Tm1652Display display_;
 
     void InitializeButtons() {
@@ -34,14 +37,19 @@ private:
             }
             app.ToggleChatState();
         });
+        key2_button_.OnLongPress([]() {
+            MiAlarmFactoryReset("GPIO2 long press");
+        });
     }
 
 public:
     MiAlarmTm1652Board()
         : boot_button_(BOOT_BUTTON_GPIO),
+          key2_button_(KEY2_BUTTON_GPIO, false, KEY2_FACTORY_RESET_HOLD_MS),
           display_(DISPLAY_TM1652_GPIO) {
         InitializeButtons();
         ESP_LOGI(TAG, "board initialized: TM1652 + MAX98357 + ICS-43434 + 2xWS2812B");
+        ESP_LOGI(TAG, "GPIO2 长按 %d ms = 恢复出厂", (int)KEY2_FACTORY_RESET_HOLD_MS);
     }
 
     virtual Led* GetLed() override {

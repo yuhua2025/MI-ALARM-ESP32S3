@@ -340,3 +340,86 @@ SNTP init 由旧版 3.3s 提前到 ~1.9s，同步由 7.1s 缩到 2.5~5.2s。
 
 产物 app `2,080,192 B`，SHA-256 `855402f1…81`，烧录 `Hash verified`、读回逐字节一致；
 归档 `xiaozhi_port/firmware/*_clock_*.bin` + `SHA256SUMS`。
+
+## 15:5x 长按按键2恢复出厂 + 中文语音「重置成功」
+
+需求：长按按键2（GPIO2）清除 Wi-Fi 配网和所有设置，并语音提醒「重置成功」。
+
+### 改动清单
+
+| 文件 | 改动 |
+| --- | --- |
+| `config.h` | 新增 `KEY2_FACTORY_RESET_HOLD_MS 5000`（5 秒防误触）；GPIO2 不是 strapping 脚 |
+| `mi_alarm_tm1652_board.cc` | 新增 `Button key2_button_`，`OnLongPress()` → `MiAlarmFactoryReset("GPIO2 long press")`；开机打印长按时长 |
+| `factory_reset.h/.cc`（新增） | 唯一恢复出厂入口，按键与 UDP 共用 |
+| `rf_tools.cc` | UDP 3333 新增 `FACTORY CONFIRM`；不带 `CONFIRM` 一律拒绝，防止误发一条包就清空设备 |
+| `main/assets/common/reset_success.ogg`（新增） | 中文「重置成功」，Ogg Opus / mono / 16 kHz / 1.17 s / 4,450 B |
+| `main/CMakeLists.txt` | 语言头生成规则的 `DEPENDS` 补上 `${LANG_SOUNDS}` `${COMMON_SOUNDS}` |
+
+`MiAlarmFactoryReset()` 的执行顺序（顺序很重要）：
+
+1. `Application::Schedule()` 里调 `PlaySound(Lang::Sounds::OGG_RESET_SUCCESS)`，走官方提示音同一条播放链路；
+2. 独立任务先等 1.8 s（语音 1.17 s），再轮询 `AudioService::IsPlaybackIdle()` 最多 3 s，
+   **确认语音播完才动手**，否则重启会把提示音掐成半句；
+3. `esp_wifi_disconnect()` + `esp_wifi_stop()`，避免驱动在擦除后把当前凭据写回 NVS；
+4. `nvs_flash_deinit()` → `nvs_flash_erase()`；失败兜底用
+   `esp_partition_erase_range()` 直擦 `nvs` 分区；
+5. `esp_restart()`，重启后因无凭据自动进配网 AP。`std::atomic<bool>` 防重复触发。
+
+`nvs_flash_erase()` 擦的是整个默认 NVS 分区（0x9000 / 0x4000），所以 Wi-Fi 凭据、`wifi/max_tx_power`、
+`mi_alarm/rf_best`、音量/唤醒词等所有设置一起清掉；`assets` 分区与 `otadata` 不动，
+重启仍从 `ota_0` 启动，中文语音包不会丢。
+
+### 中文语音怎么来的（本机无 ffmpeg/opusenc）
+
+macOS `say -v Tingting` → `afconvert` 重采样成 16 kHz 单声道 WAV →
+Python `soundfile`(libsndfile 1.2.2) 写 Ogg Opus。macOS 自带 `afconvert` 虽列出
+`Oggf` + `opus`，实测写入一律 `ExtAudioFileWrite failed ('fmt?')`，不能用。
+
+产物放进 `main/assets/common/` 后由 CMake 的 `COMMON_SOUNDS` GLOB 自动嵌入 app，
+`gen_lang.py` 自动生成 `Lang::Sounds::OGG_RESET_SUCCESS`（引用 `_binary_reset_success_ogg_start`）。
+**坑**：官方 `add_custom_command()` 只依赖 `language.json`，新增 `.ogg` 不会触发
+`lang_config.h` 重生成，第一次编译报 `'OGG_RESET_SUCCESS' is not a member of 'Lang::Sounds'`。
+已在 DEPENDS 补上音效列表并手动跑过一次 `gen_lang.py`，以后新增语音不会再踩。
+
+板级源码副本目录里也放了一份 `reset_success.ogg`，复现时把它复制到小智项目的
+`main/assets/common/reset_success.ogg`。
+
+### 实测（编译 → 烧录 → 真实串口 + UDP，2026-11-16）
+
+编译 `0 error / 0 warning`，app `2,086,656 B`，SHA-256 `b9405844…a47`；
+只烧 app @ `0x20000`，`Hash verified`，保留 NVS / 配网 / 中文 assets。
+
+| 步骤 | 实测结果 |
+| --- | --- |
+| 防误触 | UDP `FACTORY` → `ERR 需确认: FACTORY CONFIRM` |
+| 触发 | UDP `FACTORY CONFIRM` → `OK factory reset started` |
+| 语音 | `PlaySound(OGG_RESET_SUCCESS) ogg_bytes=4450`；`AudioService: Resampling audio from 16000 to 24000`；推入后 `idle=0` → `drained=1`，无 `OggDemuxer` 报错 |
+| 擦除 | `nvs_flash_deinit -> 0 (ESP_OK)`、`NVS erase -> 0 (ESP_OK)` |
+| 重启 | `esp_restart` → `rst:0xc (RTC_SW_CPU_RST)` |
+| 清 Wi-Fi | `SsidManager: NVS namespace wifi doesn't exist`；`Starting config AP`；热点 `Xiaozhi-1021` / `192.168.4.1` |
+| 清全部设置 | 重启后 `RfTools: legacy=0 best=0`（连 `mi_alarm/rf_best` 也没了） |
+| 显示 | 空窗/配网仍是开机配网表情两帧交替，无 `----`、无熄灭、无 panic |
+| 读回 app | 从 `0x20000` 读回 `2,086,656 B` 与归档 bin `cmp` 逐字节一致 |
+| 回滚验证 | 写回 `nvs_backup_before_factory_test.bin` 到 `0x9000`，1 秒内 `STAT` → `ssid=Home ip=192.168.8.129 best=80`；SNTP `time_synced=1`、Idle → `scene -> clock` |
+
+NVS 分区读回：擦除后 `0xFF` 占 86.65%（重启后系统会重建 NVS 页头并写入新的运行期键值，
+所以不是全 `0xFF`）；**功能层面的硬证据是 `wifi` namespace 不存在 + 自动进配网 AP**。
+测试前备份的 NVS 已写回，设备当前恢复原状，无需重新配网。
+
+归档 `xiaozhi_port/firmware/*_factory_*.bin` + `SHA256SUMS`。
+
+### 尚未验证 / 需手动确认
+
+- **GPIO2 物理长按 5 秒**：自动化实测走的是 UDP 同一函数入口；物理按键路径已编译注册
+  （开机日志 `GPIO2 长按 5000 ms = 恢复出厂`，Button 构造失败会直接 abort），
+  但需要人手按住按键2 满 5 秒做最终确认。
+- **「重置成功」的听感**：串口能证明 Ogg 被解复用、16k→24k 重采样、解码队列排空，
+  本机没有录音设备做声学回放确认。
+
+### 安全提示
+
+- UDP 3333 的 `FACTORY CONFIRM` 对局域网内任何主机开放；不需要远程维护时，
+  删掉 `rf_tools.cc` 里该分支即可只保留按键触发。
+- `xiaozhi_port/firmware/nvs_backup_before_factory_test.bin` 含本机 Wi-Fi 凭据，
+  已加入 `.gitignore`，**不要上传公开仓库或外传**。
