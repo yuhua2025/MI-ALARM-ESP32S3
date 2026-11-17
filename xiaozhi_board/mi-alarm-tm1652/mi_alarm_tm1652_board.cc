@@ -5,6 +5,7 @@
 #include "config.h"
 #include "led/circular_strip.h"
 #include "tm1652_display.h"
+#include "tm1652_backlight.h"
 #include "rf_tools.h"
 #include "factory_reset.h"
 
@@ -27,6 +28,7 @@ private:
     Button boot_button_;
     Button key2_button_;
     Tm1652Display display_;
+    Tm1652Backlight backlight_;
 
     void InitializeButtons() {
         boot_button_.OnClick([this]() {
@@ -46,10 +48,15 @@ public:
     MiAlarmTm1652Board()
         : boot_button_(BOOT_BUTTON_GPIO),
           key2_button_(KEY2_BUTTON_GPIO, false, KEY2_FACTORY_RESET_HOLD_MS),
-          display_(DISPLAY_TM1652_GPIO) {
+          display_(DISPLAY_TM1652_GPIO),
+          backlight_(&display_) {
         InitializeButtons();
+        // 恢复上次亮度（NVS display/brightness）；没有保存过则官方默认 75%。
+        // 放在 display_ 构造之后，刷新任务已启动，投递的档位会在下一帧应用。
+        backlight_.RestoreBrightness();
         ESP_LOGI(TAG, "board initialized: TM1652 + MAX98357 + ICS-43434 + 2xWS2812B");
         ESP_LOGI(TAG, "GPIO2 长按 %d ms = 恢复出厂", (int)KEY2_FACTORY_RESET_HOLD_MS);
+        ESP_LOGI(TAG, "数码管亮度 %u%%（语音：把屏幕调亮/调暗）", backlight_.brightness());
     }
 
     virtual Led* GetLed() override {
@@ -68,6 +75,12 @@ public:
 
     virtual Display* GetDisplay() override {
         return &display_;
+    }
+
+    // 返回 Backlight 后，mcp_server 会自动注册 self.screen.set_brightness，
+    // GetDeviceStatusJson() 也会上报 screen.brightness，大模型就能语音调亮度。
+    virtual Backlight* GetBacklight() override {
+        return &backlight_;
     }
 
     virtual void StartNetwork() override {

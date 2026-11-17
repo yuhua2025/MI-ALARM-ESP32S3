@@ -42,6 +42,10 @@ public:
     void SetPowerSaveMode(bool on) override;
     bool IsMonochrome() const override { return true; }
 
+    // 亮度由 Backlight 抽象统一管理（0~100），这里只把百分比映射到 TM1652 的 0~7 档。
+    // 用原子变量投递给 100ms 刷新任务实际应用，避免在定时器上下文和 Flush 抢单线时序。
+    void SetBrightnessPercent(uint8_t percent);
+
 protected:
     bool Lock(int timeout_ms = 0) override;
     void Unlock() override;
@@ -68,6 +72,8 @@ private:
     uint8_t shown_[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
     int64_t last_cmd_us_ = 0;
     int applied_brightness_ = -1;
+    int last_requested_level_ = -1;  // 只在档位变化时打日志，避免 5ms 渐变刷屏
+    std::atomic<int> pending_brightness_{-1};  // -1 = 无待应用亮度档位
 
     // TM1652 单线时序
     static uint8_t ReverseByte(uint8_t b);

@@ -197,6 +197,24 @@ void Tm1652Display::SetBrightness(uint8_t intensity) {
     applied_brightness_ = intensity;
 }
 
+void Tm1652Display::SetBrightnessPercent(uint8_t percent) {
+    // 0~100 → TM1652 的 0~7 档。percent=0 映射到 0 档（占空比最低、几乎看不见，
+    // 但不是断电熄灭），其余百分比至少给 1 档，保证「调暗」不会让画面直接消失。
+    int level;
+    if (percent == 0) {
+        level = 0;
+    } else {
+        level = (int)(((uint32_t)percent * 7 + 50) / 100);
+        if (level < 1) level = 1;
+        if (level > 7) level = 7;
+    }
+    pending_brightness_.store(level);
+    if (level != last_requested_level_) {
+        last_requested_level_ = level;
+        ESP_LOGI(TAG, "亮度请求 %u%% -> TM1652 档位 %d", percent, level);
+    }
+}
+
 void Tm1652Display::Flush(bool force) {
     if (!force && memcmp(frame_, shown_, 6) == 0) return;
 
@@ -360,6 +378,14 @@ Tm1652Display::Scene Tm1652Display::EffectiveScene() const {
 void Tm1652Display::RenderFrame() {
     if (!Lock(20)) return;
 
+    // 应用 Backlight 投递的亮度档位。必须在 Lock 内：亮度命令和段码帧共用
+    // 同一根单线，且两条命令之间要满足 TM1652_WAITCMD 间隔。
+    int pending = pending_brightness_.exchange(-1);
+    if (pending >= 0 && pending != applied_brightness_) {
+        SetBrightness((uint8_t)pending);
+        ESP_LOGI(TAG, "亮度已应用: 档位 %d (current=%d)", pending, applied_brightness_);
+    }
+
     int64_t now_us = esp_timer_get_time();
     bool blink = ((now_us / 500000) & 1) == 0;
     bool fast_blink = ((now_us / 250000) & 1) == 0;
@@ -496,8 +522,9 @@ bool Tm1652Display::SetEmotion(const char* emotion) {
 }
 
 void Tm1652Display::SetPowerSaveMode(bool on) {
-    if (Lock(50)) {
-        SetBrightness(on ? 1 : 6);
-        Unlock();
-    }
+    // 亮度现在统一由 Backlight（self.screen.set_brightness / UDP BRIGHT）管理。
+    // 这里不再直接压到 1 档，否则会把用户语音设置的亮度覆盖掉；
+    // 本板是插电闹钟，Board 也已把 SetPowerSaveLevel 固定为 PERFORMANCE。
+    ESP_LOGI(TAG, "SetPowerSaveMode(%s) - 亮度由 Backlight 统一管理，不覆盖当前设置",
+             on ? "on" : "off");
 }

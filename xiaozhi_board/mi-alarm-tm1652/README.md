@@ -479,3 +479,55 @@ NVS 分区读回：擦除后 `0xFF` 占 86.65%（重启后系统会重建 NVS �
 - app `2,088,384 B`，SHA-256 `fcbfa8d9…2e4`，烧录 `Hash verified`、
   读回逐字节一致。归档 `*_factory_*.bin` + `SHA256SUMS` 已更新。
 - 本机 Wi-Fi 已恢复为未连接（测试前也是未连接，上网走有线 en0）。
+
+## 2026-11-17 语音控制数码管亮度（用户：「现在只能控制音量，我想控制屏幕亮度」）
+
+### 设计
+
+- 小智原生就有屏幕亮度抽象：`Board::GetBacklight()` 非空时，`mcp_server.cc`
+  自动注册 `self.screen.set_brightness`（0~100），`WifiBoard::GetDeviceStatusJson()`
+  也会上报 `screen.brightness`。**不需要改官方代码**，只要本板接上 `Backlight`。
+- 新增 `tm1652_backlight.h/.cc`：`Tm1652Backlight : public Backlight`，
+  把官方 0~100 渐变和 NVS `display/brightness` 持久化复用起来，
+  `SetBrightnessImpl()` 只负责把百分比转给 `Tm1652Display::SetBrightnessPercent()`。
+- `Tm1652Display` 把 0~100 映射到 TM1652 的 0~7 档：
+  `percent=0 → 0 档`（占空比最低，非断电），其余至少 1 档；
+  用 `std::atomic<int> pending_brightness_` 投递给 100ms 刷新任务，在 `Lock()` 内
+  发亮度命令，避免在定时器回调里和段码 Flush 抢单线时序。
+- 覆写 `RestoreBrightness()`：官方实现会把保存的 `0` 改成 `10`，本板保留 `0`；
+  另外基类 `brightness_` 初值为 0，保存值恰好为 0 时 `SetBrightness()` 会提前返回，
+  所以额外直接投一次 0 档，避免开机停在默认 6 档。
+- `SetPowerSaveMode()` 不再压到 1 档，否则会把语音设置的亮度覆盖掉。
+- 渐变每 5ms一步，日志只在**档位变化**时打印，避免 100 行刷屏。
+
+### UDP 调试入口（UDP 3333，与射频工具共用）
+
+```
+BRIGHT                 查询当前亮度与对应 TM1652 档位
+BRIGHT <0..100>        设置亮度并持久化到 NVS display/brightness（与语音工具同入口）
+BRIGHT TEMP <0..100>   只改当前亮度，不写 NVS
+```
+
+### 实测（编译 → 烧录 → UDP + 串口，设备 192.168.8.129）
+
+- 编译 0 error；app `2,090,544 B`（0x1fe6b0），`Hash verified`。
+- UDP 回报：
+  `BRIGHT → current=75 level=5`；
+  `BRIGHT TEMP 10 → temp=10 level=1 current=10 persist=no`；
+  `BRIGHT 100 → set=100 level=7 current=100 persist=yes`；
+  `BRIGHT 0 → set=0 level=0 current=0 persist=yes`；
+  `BRIGHT 50 → set=50 level=4 current=50 persist=yes`。
+- 串口确认 `MCP: Add tool: self.screen.set_brightness` 已注册
+  （7 tools registered: 3 visible to the model）。
+- 持久化：`BRIGHT 0` 后硬复位，启动日志
+  `Tm1652Backlight: 恢复数码管亮度 0%` → `亮度请求 0% -> TM1652 档位 0`，
+  UDP 回 `current=0 level=0`（没有被官方逻辑改成 10）。
+- 最后恢复日常亮度 `BRIGHT 75 → level=5`。
+- 归档 `xiaozhi_mi-alarm-tm1652_v2.6.0_brightness_{app,assets,merged}.bin`，
+  app SHA-256 `b92e85a568f8d3f9c755b8bc8714d49484c5b102e1f2925a81ad724804023936`。
+
+### 尚未验证
+
+- 大模型真实语音（「把屏幕调亮/调暗」）的实际调用：MCP 工具已注册且入口与 UDP 相同，
+  但需要联网激活小智后由服务端下发工具调用才能端到端确认。
+- 人眼对 8 档明暗梯度的主观感受（档位变化已由串口与段码命令确认）。

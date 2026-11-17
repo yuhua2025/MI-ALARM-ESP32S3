@@ -1,6 +1,7 @@
 #include "rf_tools.h"
 #include "config.h"
 #include "factory_reset.h"
+#include "board.h"
 
 #include <esp_log.h>
 #include <esp_err.h>
@@ -32,6 +33,15 @@ static const char* PsName(wifi_ps_type_t ps) {
         case WIFI_PS_MAX_MODEM:  return "MAX_MODEM";
         default:                 return "UNKNOWN";
     }
+}
+
+// 与 Tm1652Display::SetBrightnessPercent() 保持同一映射，便于 UDP 实测核对档位
+static int BrightnessLevel(int percent) {
+    if (percent <= 0) return 0;
+    int level = (percent * 7 + 50) / 100;
+    if (level < 1) level = 1;
+    if (level > 7) level = 7;
+    return level;
 }
 
 // 官方配网页写入的历史值：namespace "wifi" / key "max_tx_power"，单位 0.25dBm
@@ -183,7 +193,7 @@ static void RfTask(void* arg) {
         vTaskDelete(nullptr);
         return;
     }
-    ESP_LOGI(TAG, "[RF] UDP 测试服务已启动: 0.0.0.0:%d (STAT/TXP/PS/BURST/SAVE/CLR/FACTORY)", RF_PORT);
+    ESP_LOGI(TAG, "[RF] UDP 测试服务已启动: 0.0.0.0:%d (STAT/TXP/PS/BURST/SAVE/CLR/BRIGHT/FACTORY)", RF_PORT);
 
     char buf[RF_BUFSZ];
     char reply[RF_BUFSZ];
@@ -247,6 +257,45 @@ static void RfTask(void* arg) {
             SaveBestTxPower(0);
             ClearLegacyTxPower();
             snprintf(reply, sizeof(reply), "OK cleared");
+        } else if (strcasecmp(cmd, "BRIGHT") == 0) {
+            // 语音走的是 self.screen.set_brightness -> Backlight::SetBrightness(v, true)。
+            // UDP 用完全相同的入口，便于不联网时也能实测 0~100 -> TM1652 0~7 档
+            // 以及 NVS display/brightness 的持久化。TEMP 子命令只改当前亮度不落盘。
+            auto* backlight = Board::GetInstance().GetBacklight();
+            if (backlight == nullptr) {
+                snprintf(reply, sizeof(reply), "ERR no backlight on this board");
+            } else {
+                char sub[16] = {0};
+                int v = -1;
+                int argc = 0;
+                if (sscanf(buf, "%*s %15s %d", sub, &v) == 2) {
+                    argc = strcasecmp(sub, "TEMP") == 0 ? 2 : -1;
+                } else if (sscanf(buf, "%*s %d", &v) == 1) {
+                    argc = 1;
+                } else if (sscanf(buf, "%*s %15s", sub) == 1) {
+                    argc = -1;
+                }
+                if (argc == 2 && v >= 0 && v <= 100) {
+                    backlight->SetBrightness((uint8_t)v, false);
+                    vTaskDelay(pdMS_TO_TICKS(550));  // 等 5ms/step 渐变走完再回报
+                    snprintf(reply, sizeof(reply), "OK temp=%d level=%d current=%u persist=no",
+                             v, BrightnessLevel(v), (unsigned)backlight->brightness());
+                    ESP_LOGI(TAG, "[BRIGHT] 临时亮度 %d%% -> TM1652 档位 %d", v, BrightnessLevel(v));
+                } else if (argc == 1 && v >= 0 && v <= 100) {
+                    backlight->SetBrightness((uint8_t)v, true);
+                    vTaskDelay(pdMS_TO_TICKS(550));
+                    snprintf(reply, sizeof(reply), "OK set=%d level=%d current=%u persist=yes",
+                             v, BrightnessLevel(v), (unsigned)backlight->brightness());
+                    ESP_LOGI(TAG, "[BRIGHT] 持久亮度 %d%% -> TM1652 档位 %d (NVS display/brightness)",
+                             v, BrightnessLevel(v));
+                } else if (argc == 0) {
+                    unsigned cur = backlight->brightness();
+                    snprintf(reply, sizeof(reply), "OK current=%u level=%d (usage: BRIGHT <0..100> | BRIGHT TEMP <0..100>)",
+                             cur, BrightnessLevel((int)cur));
+                } else {
+                    snprintf(reply, sizeof(reply), "ERR usage BRIGHT <0..100> | BRIGHT TEMP <0..100>");
+                }
+            }
         } else if (strcasecmp(cmd, "FACTORY") == 0) {
             // 软件触发入口：与 GPIO2 长按调用同一个 MiAlarmFactoryReset()，
             // 便于无人值守时用串口/网络验证整条链路（也方便后续远程维护）。
@@ -263,7 +312,7 @@ static void RfTask(void* arg) {
             }
         } else {
             snprintf(reply, sizeof(reply),
-                     "ERR unknown; STAT|TXP <q>|PS <0|1|2>|BURST <host> <port> <n> <ms>|SAVE <q>|CLR|FACTORY CONFIRM");
+                     "ERR unknown; STAT|TXP <q>|PS <0|1|2>|BURST <host> <port> <n> <ms>|SAVE <q>|CLR|BRIGHT <0..100>|BRIGHT TEMP <0..100>|FACTORY CONFIRM");
         }
 
         sendto(sock, reply, strlen(reply), 0, (struct sockaddr*)&cli, clen);
