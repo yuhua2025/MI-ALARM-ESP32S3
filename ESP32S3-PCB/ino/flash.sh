@@ -3,7 +3,8 @@
 #
 #   sh flash.sh                              # 自动找 ESP32-S3，烧 app（0x10000，保留设置）
 #   sh flash.sh /dev/cu.usbmodemXXXX         # 指定端口
-#   sh flash.sh /dev/cu.usbmodemXXXX --full # 烧 8MB 全片镜像（清 NVS/设置）
+#   sh flash.sh /dev/cu.usbmodemXXXX --full # 烧 16MB 全片镜像（清 NVS/设置）
+#   sh flash.sh /dev/cu.usbmodemXXXX --part # 换引导+分区表+app（保留 NVS/设置）
 #
 # 安全规则：**只有 esptool 自动检测出该端口是 ESP32-S3 才会执行 write-flash**。
 # 本机 /dev/cu.usbmodem312401 是 ZMK 键盘 dongle（Dayu k30 Dongle），
@@ -11,14 +12,18 @@
 set -e
 cd "$(dirname "$0")"
 
-APP="build/XiaoMiClock_v4.1_esp32s3_app.bin"
-FULL="build/XiaoMiClock_v4.1_esp32s3_merged.bin"
+APP="build/XiaoMiClock_v4.8.12_esp32s3_app.bin"
+FULL="build/XiaoMiClock_v4.8.12_esp32s3_merged.bin"
+BOOT="build/ino.ino.bootloader.bin"
+PART="build/ino.ino.partitions.bin"
+BOOTAPP="build/boot_app0.bin"
 
 PORT=""
 MODE="app"
 for arg in "$@"; do
   case "$arg" in
     --full) MODE="full" ;;
+    --part) MODE="part" ;;
     *)      PORT="$arg" ;;
   esac
 done
@@ -103,6 +108,20 @@ if [ "$MODE" = "full" ]; then
   echo "!! 全片烧录会清空 NVS（WiFi 与全部设置）!!  端口=$PORT  镜像=$FULL"
   python3 -m esptool --chip esp32s3 -p "$PORT" -b 921600 --before "$RESET" \
     write-flash 0x0 "$FULL"
+elif [ "$MODE" = "part" ]; then
+  # 分区表换布局（8MB → 16MB）时必须连引导一起烧：
+  #   0x0    bootloader   引导里编着 flash 容量，旧的是按 8MB 编的
+  #   0x8000 partitions   新的 16MB 分区表
+  #   0xe000 boot_app0    OTA 选择器占位（全 0xFF = 直接引导 ota_0）
+  #   0x10000 app
+  # 这四段都落在 0x9000(NVS) 之外，所以 Wi-Fi 和全部设置原样保留。
+  for f in "$BOOT" "$PART" "$BOOTAPP" "$APP"; do
+    [ -f "$f" ] || { echo "缺少 $f，先跑 sh build.sh" >&2; exit 1; }
+  done
+  echo
+  echo "烧录 引导+分区表+app（保留 NVS）  端口=$PORT"
+  python3 -m esptool --chip esp32s3 -p "$PORT" -b 921600 --before "$RESET" \
+    write-flash 0x0 "$BOOT" 0x8000 "$PART" 0xe000 "$BOOTAPP" 0x10000 "$APP"
 else
   [ -f "$APP" ] || { echo "缺少 $APP，先跑 sh build.sh" >&2; exit 1; }
   echo

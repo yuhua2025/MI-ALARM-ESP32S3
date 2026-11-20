@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>小米智能闹钟 · ESP32-S3 固件在线烧录</title>
+  <meta name="description" content="小米智能闹钟改装版固件在线烧录：ESP32-S3 + TM1652 数码管 + 小智 AI 语音。插上 USB-C，在浏览器里直接刷入固件，无需安装任何工具。">
+  <meta name="theme-color" content="#070b0f">
+  <link rel="stylesheet" href="./css/style.css?v=2026112001">
+  <!-- esp-web-tools 组件：提供 <esp-web-install-button>，本地自托管，不依赖第三方 CDN -->
+  <script type="module" src="./js/install-button.js"></script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <!-- ============ HERO / 终端窗口 ============ -->
+  <header class="site-header">
+    <div class="shell terminal">
+      <div class="window-bar">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="window-path">root@mi-alarm:~/esp32s3-web-flasher$ <b>./flash.sh</b></span>
+        <span class="window-status"><i></i> SYSTEM ONLINE</span>
+      </div>
+
+      <div class="hero">
+        <div class="term-cmd"><span class="prompt">$</span> web-serial --chip esp32s3 --baud 921600 --no-server</div>
+
+        <span class="badge" id="brandBadge">ESP32-S3 / WEB FLASHER</span>
+        <h1 id="siteTitle">小米智能闹钟 · 小智版</h1>
+        <p id="siteSubtitle"></p>
+
+        <div class="hero-stats" aria-label="硬件概要">
+          <div class="stat"><span class="k">MCU</span><span class="v">ESP32-S3</span></div>
+          <div class="stat"><span class="k">FLASH / PSRAM</span><span class="v">16M / 8M</span></div>
+          <div class="stat"><span class="k">DISPLAY</span><span class="v">TM1652</span></div>
+          <div class="stat"><span class="k">AUDIO</span><span class="v">I2S ×2</span></div>
+        </div>
+
+        <div class="hero-art">
+          <span class="corner tl" aria-hidden="true"></span>
+          <span class="corner tr" aria-hidden="true"></span>
+          <span class="corner bl" aria-hidden="true"></span>
+          <span class="corner br" aria-hidden="true"></span>
+          <img src="./img/video-cover.jpg?v=2026112001" alt="改装后的小米智能闹钟：黑色镜面机身，TM1652 数码管显示时间，右下角 WiFi 图标">
+          <div class="art-caption">
+            <span>MI-ALARM / ESP32-S3 MOD</span>
+            <span class="art-caption-right">TM1652 · 真人报时 · 小智 AI</span>
+          </div>
+        </div>
+
+        <!-- 视频入口 -->
+        <div class="video-entry" style="margin:1rem auto;max-width:760px;text-align:center">
+          <a href="https://www.bilibili.com/video/BV1T4sq62EYT" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.55rem;padding:.6rem 1.1rem;border:1px solid var(--line);border-radius:6px;color:var(--cyan);font:.85rem var(--mono);text-decoration:none;background:rgba(69,215,242,.05)">
+            <span style="font-size:1.1rem">▶</span> 观看改装全过程 ·【万物皆可小智】之小米智能闹钟版（Bilibili）
+          </a>
+        </div>
+
+        <div class="driver-bar" id="driverBar"></div>
+      </div>
+
+      <nav class="jump-nav" aria-label="页面导航">
+        <a href="#sec-firmware"><span>01</span> 固件</a>
+        <a href="#sec-flash"><span>02</span> 烧录</a>
+        <a href="#sec-steps"><span>03</span> 操作步骤</a>
+        <a href="#sec-gallery"><span>04</span> 硬件图鉴</a>
+        <a href="https://www.bilibili.com/video/BV1T4sq62EYT" target="_blank" rel="noopener"><span>05</span> 视频</a>
+        <a href="#aboutCard"><span>06</span> 关于项目</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container shell">
+    <div class="layout">
+
+      <!-- ============ 01 · 选择固件 ============ -->
+      <section class="card" id="sec-firmware">
+        <div class="card-title" data-idx="01"><span>选择固件</span><span class="en">FIRMWARE_SELECT</span></div>
+        <div class="fw-list" id="firmwareList"></div>
+
+        <div class="field">
+          <label for="versionSelect">// 版本 VERSION</label>
+          <select id="versionSelect"></select>
+        </div>
+
+        <div class="changes" id="versionChanges" hidden></div>
+
+        <div class="divider"><span>OR / 手动选择本地固件</span></div>
+
+        <div class="local-block">
+          <p class="muted" id="localIntro">
+            选择电脑上的 <code>.bin</code> 固件，浏览器直接生成 manifest 并烧录，文件不会上传到任何服务器。
+            适合刷入自己编译的固件或其它离线镜像。
+          </p>
+
+          <div class="local-form">
+            <div class="field">
+              <label for="localFile">// 固件文件 FIRMWARE_FILE (.bin)</label>
+              <input type="file" id="localFile" class="input" accept=".bin,application/octet-stream">
+            </div>
+
+            <div class="local-row">
+              <div class="field">
+                <label for="localChip">// 芯片 CHIP_FAMILY</label>
+                <select id="localChip" class="input"></select>
+              </div>
+              <div class="field">
+                <label for="localOffset">// 烧录偏移 OFFSET</label>
+                <input type="text" id="localOffset" class="input" value="0x0" placeholder="0x0">
+              </div>
+            </div>
+          </div>
+
+          <div class="flash-panel" id="localFlashPanel" hidden>
+            <esp-web-install-button id="installLocalBtn" manifest="">
+              <button slot="activate" class="btn-flash" type="button">
+                ▸ 连接设备并烧录本地固件
+                <span class="sub" id="localChipHint">ESP32-S3</span>
+              </button>
+              <div slot="unsupported" class="fallback">
+                <strong>当前浏览器不支持在线烧录</strong><br>
+                请用桌面版 Chrome、Edge 或 Firefox 打开本页面。iOS 上的所有浏览器都不支持
+                Web Serial，请改用电脑操作。
+              </div>
+              <div slot="not-allowed" class="fallback">
+                <strong>需要通过 HTTPS 访问</strong><br>
+                Web Serial 是安全上下文接口，请在 <code>https://</code> 域名下打开本页面，
+                或在本地用 <code>http://localhost</code> 调试。
+              </div>
+            </esp-web-install-button>
+
+            <div class="flash-meta">
+              <span class="pill" id="localMetaFile">文件：—</span>
+              <span class="pill" id="localMetaSize">大小：—</span>
+              <span class="pill" id="localMetaChip">芯片：—</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 02 · 连接并烧录 ============ -->
+      <section class="card" id="sec-flash">
+        <div class="card-title" data-idx="02"><span>连接并烧录</span><span class="en">FLASH_DEVICE</span></div>
+
+        <div class="flash-panel">
+          <esp-web-install-button id="installBtn" manifest="./manifests/allinone_v1_6_0.json">
+            <button slot="activate" class="btn-flash" type="button">
+              ▸ 连接设备并烧录
+              <span class="sub" id="chipHint">ESP32-S3</span>
+            </button>
+            <div slot="unsupported" class="fallback">
+              <strong>当前浏览器不支持在线烧录</strong><br>
+              请用桌面版 Chrome、Edge 或 Firefox 打开本页面。iOS 上的所有浏览器都不支持
+              Web Serial，请改用电脑操作。
+            </div>
+            <div slot="not-allowed" class="fallback">
+              <strong>需要通过 HTTPS 访问</strong><br>
+              Web Serial 是安全上下文接口，请在 <code>https://</code> 域名下打开本页面，
+              或在本地用 <code>http://localhost</code> 调试。
+            </div>
+          </esp-web-install-button>
+
+          <div class="flash-meta">
+            <span class="pill" id="metaChip">芯片：ESP32-S3</span>
+            <span class="pill" id="metaBaud">波特率：921600</span>
+            <span class="pill" id="metaSize">固件：—</span>
+            <span class="pill">● 不经过服务器中转</span>
+          </div>
+
+          <div class="links center" id="downloadLinks">
+            <a id="binLink" href="#" download>↓ 下载 .bin 固件</a>
+            <a id="manifestLink" href="#" target="_blank">↗ 查看清单 manifest</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 03 · 操作步骤 ============ -->
+      <section class="card" id="sec-steps">
+        <div class="card-title" data-idx="03"><span>操作步骤</span><span class="en">RUNBOOK</span></div>
+        <ol class="steps" id="stepList"></ol>
+        <div class="changes" id="tipsBox" hidden></div>
+      </section>
+
+      <!-- ============ 04 · 硬件图鉴 ============ -->
+      <section class="card" id="sec-gallery">
+        <div class="card-title" data-idx="04"><span>硬件图鉴</span><span class="en">GALLERY / MI-ALARM</span></div>
+        <div class="gallery-grid">
+          <figure class="shot">
+            <div class="shot-bar"><span>video-cover.jpg</span><span>01 / MODDED</span></div>
+            <div class="shot-img"><img src="./img/video-cover.jpg?v=2026112001" loading="lazy" alt="改装完成的小米智能闹钟：TM1652 数码管显示时间，右下角 WiFi 图标"></div>
+            <figcaption><strong>改装成品</strong>换了 ESP32-S3 主控 + TM1652 数码管，真人报时、小智 AI 语音对话。</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="shot-bar"><span>device-original.gif</span><span>02 / ORIGINAL</span></div>
+            <div class="shot-img"><img src="./img/device-original.gif?v=2026112001" loading="lazy" alt="改装前的原装小米智能闹钟：黑色镜面机身，屏幕显示小爱同学表情"></div>
+            <figcaption><strong>改装前</strong>原装小米闹钟的外观——保留这个外壳，里面换成自制的 ESP32-S3 主板。</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="shot-bar"><span>display.svg</span><span>03 / DISPLAY</span></div>
+            <div class="shot-img"><img src="./img/gallery-display.svg?v=2026112001" loading="lazy" alt="TM1652 四位数码管显示 21:17 的示意图"></div>
+            <figcaption><strong>数码管</strong>时间 / 验证码共用四位显示；连写两遍 + 3 秒兜底，静态画面不缺笔画。</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="shot-bar"><span>features.svg</span><span>04 / FEATURES</span></div>
+            <div class="shot-img"><img src="./img/gallery-features.svg?v=2026112001" loading="lazy" alt="功能示意：闹钟、氛围灯、报时、配网页、按键操作"></div>
+            <figcaption><strong>核心功能</strong>整点真人报时、闹铃 + RGB 闪灯、12/24 小时切换、手机网页配网与设置。</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ============ 05 · 设备信息 ============ -->
+      <section class="card" id="sec-product">
+        <div class="card-title" id="productName" data-idx="05">设备信息</div>
+        <div class="badges" id="productBadges"></div>
+        <div class="product-image" id="productImage">
+          <span class="placeholder">在 config.json 里配置 product.image 可显示产品图</span>
+        </div>
+        <p id="productDesc" class="muted"></p>
+        <div class="links" id="productLinks"></div>
+      </section>
+
+      <!-- ============ 06 · 设备一览 ============ -->
+      <section class="card" id="specCard" hidden>
+        <div class="card-title" data-idx="06"><span>设备一览</span><span class="en">HARDWARE_SPEC</span></div>
+        <div class="spec-grid" id="specGrid"></div>
+      </section>
+
+      <!-- ============ 07 · 关于本项目 ============ -->
+      <section class="card" id="aboutCard" hidden>
+        <div class="card-title" id="aboutTitle" data-idx="07">关于本项目</div>
+        <div id="aboutBox"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-top">
+        <span class="footer-brand">MI_ALARM_ESP32S3 // WEB FLASHER</span>
+        <span id="footerText">由 esp-web-tools 提供浏览器端烧录能力 · Made by Dayu</span>
+      </div>
+      <div class="links center" id="footerLinks">
+        <a href="https://github.com/yuhua2025/MI-ALARM-ESP32S3" target="_blank" rel="noopener">本项目源码</a>
+        <a href="https://www.bilibili.com/video/BV1T4sq62EYT" target="_blank" rel="noopener">B站视频</a>
+        <a href="https://github.com/esphome/esp-web-tools" target="_blank" rel="noopener">esp-web-tools</a>
+      </div>
+      <div class="visit-counter" id="visitCounter" hidden>
+        <span class="visit-icon">◉</span>
+        <span id="visitLabel">本站访问量</span>
+        <strong id="visitValue">—</strong>
+        <span id="visitUnit">次</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./js/app.js?v=2026111801"></script>
+</body>
+</html>

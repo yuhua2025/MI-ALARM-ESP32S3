@@ -1,0 +1,132 @@
+{
+  "cacheBust": "2026112001",
+
+  "site": {
+    "badge": "MI-ALARM / ESP32-S3 WEB FLASHER",
+    "title": "小米智能闹钟 · 小智版",
+    "docTitle": "小米智能闹钟 · ESP32-S3 固件在线烧录",
+    "subtitle": "把家里的小米智能闹钟改成 ESP32-S3 主控：保留原装外壳，换上 TM1652 数码管、真人报时和小智 AI 语音。插上 USB-C，在浏览器里直接把固件写进设备 —— 不用装烧录工具、不用敲命令行，固件也不经过任何服务器。",
+    "footer": "// POWERED BY esp-web-tools · 固件仅在本地浏览器与设备之间传输 · Made by Dayu",
+    "source": {
+      "label": "本项目源码",
+      "url": "https://github.com/yuhua2025/MI-ALARM-ESP32S3"
+    }
+  },
+
+  "visits": {
+    "enabled": false,
+    "label": "本站访问量",
+    "unit": "次",
+    "api": "https://events.vercount.one/api/v2/log",
+    "metric": "site_pv",
+    "timeout": 5000
+  },
+
+  "drivers": [],
+
+  "product": {
+    "name": "设备信息 / MI-ALARM-ESP32S3",
+    "description": "基于小米智能闹钟外壳改造的桌面 AI 闹钟：ESP32-S3 自画主板、TM1652 四位数码管、MAX98357 I2S 功放、WS2812B 氛围灯、双按键。刷入固件后连一次家里 2.4G WiFi，即可使用真人整点报时、闹铃和小智 AI 语音对话。",
+    "image": "./img/video-cover.jpg",
+    "badges": ["ESP32-S3 裸片", "16MB Flash + 8MB PSRAM", "TM1652 数码管", "I2S 功放 + 麦克风", "WS2812B×2", "小智 AI"],
+    "links": [
+      { "label": "本项目源码", "url": "https://github.com/yuhua2025/MI-ALARM-ESP32S3" },
+      { "label": "改装视频（Bilibili）", "url": "https://www.bilibili.com/video/BV1T4sq62EYT" }
+    ],
+    "specs": [
+      { "label": "主控 MCU", "value": "ESP32-S3 QFN56 裸片（双核 Xtensa）" },
+      { "label": "存储", "value": "16 MB Flash + 8 MB PSRAM（40MHz）" },
+      { "label": "显示", "value": "TM1652 四位数码管（单线 SDA）" },
+      { "label": "音频输入", "value": "ICS-43434 I2S 麦克风（已预留）" },
+      { "label": "音频输出", "value": "MAX98357 I2S 功放" },
+      { "label": "氛围灯", "value": "WS2812B × 2（GPIO10）" },
+      { "label": "按键", "value": "主按键 GPIO0 / 恢复出厂 GPIO2" },
+      { "label": "时钟", "value": "无外部 RTC，NTP 联网校时" },
+      { "label": "联网协议", "value": "2.4G Wi-Fi · 网页配网 + 验证码保护" },
+      { "label": "特色功能", "value": "真人报时 / 闹铃 / 12-24 切换 / 小智 AI" }
+    ],
+    "about": {
+      "title": "关于本项目",
+      "intro": "这是一台把小米智能闹钟「掏空重装」的桌面 AI 闹钟。硬件用自画的 ESP32-S3 主板替换原机主控，保留原来的镜面外壳；软件基于 Arduino 框架自研固件（当前 v4.8.12），并接入小智 AI 实现语音对话。本页只做一件事：把固件通过浏览器 Web Serial 直接写进板子——全程在你自己的电脑上完成，固件不会上传到任何服务器。",
+      "items": [
+        {
+          "icon": "⏰",
+          "title": "它怎么报时",
+          "text": "24 段真人录音的整点报时直接编在 flash 数组里（约 1.8MB），到点从 flash 播放，不用拼音频、声音自然。6 段铃声（约 2MB）同样在本地。没有外部 RTC，开机先显示表情，联网 NTP 校时成功后再显示正确时间。"
+        },
+        {
+          "icon": "🖥",
+          "title": "数码管与显示自愈",
+          "text": "TM1652 是单向写、写进去读不回来，一旦某一帧被中断写歪了就会一直留在屏幕上（表现为缺笔画）。固件用「连写两遍 + 3 秒兜底重写」把概率压到可以忽略；时间画面每 500ms 冒号翻转也会自愈。"
+        },
+        {
+          "icon": "🔔",
+          "title": "闹铃与氛围灯",
+          "text": "闹铃响时 WS2812B 以 2Hz 红色明灭提醒，且无视网页氛围灯开关——关灯是「夜里不想有光」，不等于「响铃时不想被提醒」。主按键按下的瞬间就全局静音，不用等抬手，响铃/试听/报时都管。"
+        },
+        {
+          "icon": "📱",
+          "title": "网页安全与配网",
+          "text": "所有写操作要过 4 位验证码：码只显示在数码管上（关冒号区别于时间），必须主动点「获取验证码」才出，30 秒后自动消失。配网页用「热点一开就异步预扫描 + 结果缓存」，WiFi 列表秒出；手机连热点自动弹页。"
+        },
+        {
+          "icon": "🎙",
+          "title": "关于小智 AI",
+          "text": "项目保留了对小智 ESP32 固件的移植线（归档在仓库里）。主线固件是 Arduino 自研版，主打闹钟本体的报时/闹铃/网页体验；小智版走独立分支，两者硬件相同、固件不同。改装全过程见页内 B 站视频。"
+        },
+        {
+          "icon": "🛡",
+          "title": "固件从哪来、安全吗",
+          "text": "本站提供的是编译生成的完整合并镜像，写入偏移 0x0，页面给出 SHA256 便于校验。已实测镜像的 NVS 分区为全空（0 个非 FF 字节），不含 Wi-Fi 密码和账号密钥。首次开机需要重新配网——这正是发布固件应有的行为。"
+        }
+      ],
+      "note": "已知提醒：需要 2.4G WiFi（ESP32 不支持 5G）；本机无 RTC，断电后联网会重新校时；必须桌面版 Chrome / Edge / Firefox（iOS 全系不支持 Web Serial），线上需 HTTPS；烧录 16MB 镜像约需 3 分钟，期间别拔线。完整改装教程见 B 站视频《【万物皆可小智】之小米智能闹钟版》。"
+    }
+  },
+
+  "flashing": {
+    "chipFamily": "ESP32-S3",
+    "baudRate": 921600,
+    "steps": [
+      "用 <strong>USB-C 数据线</strong>把设备连到电脑（注意是数据线，只能充电的线不行）。",
+      "在 <strong>01 / 选择固件</strong>里确认版本为 v4.8.12（当前最新）。",
+      "点击 <strong>连接设备并烧录</strong>，在浏览器弹出的窗口里选中设备的串口。",
+      "勾选<strong>擦除 Flash</strong>（整盘镜像烧到 0x0，擦掉旧的 WiFi 设置），等待约 3 分钟。",
+      "设备重启后会自动开 <strong>XiaoMiClock</strong> 热点；手机连上配网，即可开始使用。"
+    ],
+    "tips": [
+      "浏览器里找不到串口：换一根数据线；若用外接 USB-TTL（CH340/CP2102），先装好对应驱动。",
+      "一直连不上：按住 BOOT 键不放，点一下 RESET，再松开 BOOT，强制进入下载模式。",
+      "烧录中途失败或校验不过：把 <code>config.json</code> 里的 <code>baudRate</code> 从 921600 依次降到 460800、115200 再试。",
+      "必须用桌面版 Chrome / Edge / Firefox，iOS 上的所有浏览器都不支持 Web Serial；线上还需 HTTPS。",
+      "镜像 16 MB，完整烧录约 3 分钟；NVS 已清空，首次开机会进配网模式，需要重新连一次 WiFi。"
+    ]
+  },
+
+  "firmwares": [
+    {
+      "id": "mialarm",
+      "name": "小米闹钟固件（小智版）",
+      "badge": "v4.8.12 最新",
+      "description": "ESP32-S3 主控的完整合并镜像：真人整点报时、闹铃闪灯、TM1652 数码管、网页配网与设置、12/24 小时切换、小智 AI 语音。编译于 2026-11-18。",
+      "features": ["真人报时 24 段", "闹铃 + 氛围灯", "网页配网/设置", "小智 AI 语音"],
+      "versions": [
+        {
+          "version": "v4.8.12",
+          "date": "2026-11-18",
+          "manifest": "./manifests/mi-alarm_v4_8_12.json",
+          "bin": "./firmware/XiaoMiClock_v4.8.12_esp32s3_merged.bin",
+          "size": "16.00 MB",
+          "sha256": "442109555df3a09be2f1a2becbfc1b9b4ead06f82a8b10088027989724c01bcd",
+          "latest": true,
+          "changes": [
+            "配网照小智优化：异步预扫描 + 结果缓存 + 10 秒静默刷新，WiFi 列表秒出（/scan 从 2~4 秒降到约 30ms）",
+            "补齐 captive portal 探测端点，手机连热点自动弹配网页",
+            "修双击不生效（改按下沿判定）与长按进配网卡顿（开热点挪出按键路径）",
+            "已实测 NVS 分区全空，无 Wi-Fi 密码与账号密钥；首次开机需重新配网"
+          ]
+        }
+      ]
+    }
+  ]
+}

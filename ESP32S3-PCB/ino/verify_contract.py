@@ -26,8 +26,17 @@ def page_html(text: str) -> str:
 
 
 page = page_html(html)
-placeholders = set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", page))
+# 占位符检查覆盖**所有** R"HTML(...)" 模板（首页、配网页、验证页），
+# 不能只盯 PAGE_HTML —— v4.7.4 的验证页就是独立模板，漏掉它等于没检查。
+placeholders = set()
+for _name, _body in re.findall(r'const char ([A-Z_0-9]+)\[\] = R"HTML\((.*?)\)HTML";',
+                               html, re.S):
+    placeholders |= set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", _body))
+# v4.7.1 起改成单遍渲染：占位符登记在 handleRoot() 的 TplVar 表里，
+# 形如 {"SYNC", vSync} / {"NON", cfg.nightOn ? "checked" : ""}。
+# 老写法 page.replace("{{X}}", ...) 也一并认，方便回退和对照。
 replaced = set(re.findall(r'page\.replace\("\{\{([A-Z0-9_]+)\}\}"', ino))
+replaced |= set(re.findall(r'\{\s*"([A-Z0-9_]+)"\s*,', ino))
 missing = placeholders - replaced
 extra = replaced - placeholders
 if missing:
@@ -41,6 +50,9 @@ save_fn = re.search(r"function save\(\)\s*\{(.*?)\n\}", page, re.S)
 save_body = save_fn.group(1) if save_fn else ""
 save_ids = set(re.findall(r"\$\('([a-z0-9]+)'\)", save_body))
 save_keys = set(re.findall(r"([a-z][a-z0-9]*)\s*:\s*", save_body))
+# v4.7.3 起 m24 改成「用户动过才提交」的 p.set('m24', ...)，
+# 不在对象字面量里了，这里也要认，否则这个参数以后漏检
+save_keys |= set(re.findall(r"\.set\(\s*'([a-z][a-z0-9]*)'", save_body))
 # handleSave 里 hasArg("xxx")
 handled = set(re.findall(r'hasArg\("([a-z][a-z0-9]*)"\)', ino))
 # 时段参数 ns/ne/cs/ce 走 hhmmToMinute(server.arg(...))，单独识别

@@ -3,14 +3,21 @@
 .DS_Store
 **/.DS_Store
 
-# Arduino 编译中间产物：只保留 v4.1 的两个发布 bin 与校验清单
+# Arduino 编译中间产物：build 下全部忽略，发布固件统一放 docs/firmware/
 ESP32S3-PCB/ino/build/*
-!ESP32S3-PCB/ino/build/XiaoMiClock_v4.1_esp32s3_app.bin
-!ESP32S3-PCB/ino/build/XiaoMiClock_v4.1_esp32s3_merged.bin
 !ESP32S3-PCB/ino/build/SHA256SUMS
+
+# 历史固件归档（体积大，含旧版 bin）与真人录音样本不外传
+firmware_backup/
+**/voice_samples*/
 
 # 设备 NVS 备份含本机 Wi-Fi 凭据，禁止入库/外传
 **/nvs_backup_*.bin
+
+# 语音样本是机主本人的录音，默认不入库（模板头文件 kws_data.h 才入库）
+ESP32S3-PCB/ino/kws/samples/
+ESP32S3-PCB/ino/kws/__pycache__/
+ESP32S3-PCB/ino/kws/samples_*/
 
 # 通用构建产物
 *.o

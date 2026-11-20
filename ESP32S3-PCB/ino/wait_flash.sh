@@ -9,7 +9,7 @@
 set -e
 cd "$(dirname "$0")"
 
-APP="build/XiaoMiClock_v4.1_esp32s3_app.bin"
+APP="build/XiaoMiClock_v4.7_esp32s3_app.bin"
 [ -f "$APP" ] || { echo "缺少 $APP，先跑 sh build.sh" >&2; exit 1; }
 
 ONLY="$1"

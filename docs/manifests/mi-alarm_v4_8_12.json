@@ -1,0 +1,14 @@
+{
+  "name": "小米智能闹钟 · 小智版 v4.8.12",
+  "version": "v4.8.12",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "improv": false,
+      "parts": [
+        { "path": "../firmware/XiaoMiClock_v4.8.12_esp32s3_merged.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
