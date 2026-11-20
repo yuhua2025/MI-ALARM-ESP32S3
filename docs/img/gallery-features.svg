@@ -7,40 +7,43 @@
   <g stroke="#12303a" stroke-width="1" opacity=".55"><path d="M0 90h640M0 180h640M0 270h640M160 0v360M320 0v360M480 0v360"/></g>
   <text x="28" y="34" font-family="'Courier New',monospace" font-size="15" fill="#45d7f2">FEATURE_MAP / MI-ALARM</text>
 
-  <!-- 报时 -->
+  <!-- 01 真人报时 -->
   <g>
-    <circle cx="112" cy="120" r="30" fill="#0d1a24" stroke="#ff7314" stroke-width="1.5"/>
-    <path d="M112 100v22l14 9" stroke="#ff9d4d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M152 96q10 8 0 16M162 88q18 16 0 32" stroke="#ff7314" stroke-width="1.6" fill="none" opacity=".7"/>
-    <text x="112" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">真人报时</text>
-    <text x="112" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">24 段整句 WAV</text>
-  </g>
-  <!-- 闹铃+灯 -->
-  <g>
-    <circle cx="320" cy="120" r="30" fill="#0d1a24" stroke="#ff3b30" stroke-width="1.5"/>
-    <path d="M320 100l6 14 15 2-11 10 3 15-13-8-13 8 3-15-11-10 15-2z" fill="#ff5a4d" filter="url(#g)"/>
-    <text x="320" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">闹铃 + 闪灯</text>
-    <text x="320" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">2Hz 红灯 · 按键即停</text>
-  </g>
-  <!-- 网页配网 -->
-  <g>
-    <rect x="272" y="94" width="96" height="58" rx="6" fill="#0d1a24" stroke="#45d7f2" stroke-width="1.5"/>
-    <path d="M292 112h56M292 124h40M292 136h48" stroke="#45d7f2" stroke-width="2" opacity=".8"/>
-    <path d="M320 74q-16 14 0 28M320 80q-9 8 0 16" stroke="#45d7f2" stroke-width="2" fill="none"/>
-    <circle cx="320" cy="70" r="3" fill="#45d7f2"/>
-    <text x="320" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">网页配网</text>
-    <text x="320" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">验证码 · 异步预扫描</text>
-  </g>
-  <!-- 按键 -->
-  <g>
-    <circle cx="528" cy="120" r="30" fill="#0d1a24" stroke="#8fa3b0" stroke-width="1.5"/>
-    <circle cx="528" cy="120" r="13" fill="#1b2836" stroke="#b8c6d1" stroke-width="1.5"/>
-    <path d="M528 107v9" stroke="#b8c6d1" stroke-width="2" stroke-linecap="round"/>
-    <text x="528" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">主按键</text>
-    <text x="528" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">双击切 12/24</text>
+    <circle cx="100" cy="120" r="30" fill="#0d1a24" stroke="#ff7314" stroke-width="1.5"/>
+    <path d="M100 100v22l14 9" stroke="#ff9d4d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M140 96q10 8 0 16M150 88q18 16 0 32" stroke="#ff7314" stroke-width="1.6" fill="none" opacity=".7"/>
+    <text x="100" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">真人报时</text>
+    <text x="100" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">24 段整句 WAV</text>
   </g>
 
-  <!-- 底部一行 -->
+  <!-- 02 闹铃 + 闪灯 -->
+  <g>
+    <circle cx="260" cy="120" r="30" fill="#0d1a24" stroke="#ff3b30" stroke-width="1.5"/>
+    <path d="M260 100l6 14 15 2-11 10 3 15-13-8-13 8 3-15-11-10 15-2z" fill="#ff5a4d" filter="url(#g)"/>
+    <text x="260" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">闹铃 + 闪灯</text>
+    <text x="260" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">2Hz 红灯 · 按键即停</text>
+  </g>
+
+  <!-- 03 网页配网 -->
+  <g>
+    <rect x="372" y="94" width="96" height="58" rx="6" fill="#0d1a24" stroke="#45d7f2" stroke-width="1.5"/>
+    <path d="M392 112h56M392 124h40M392 136h48" stroke="#45d7f2" stroke-width="2" opacity=".8"/>
+    <path d="M420 74q-16 14 0 28M420 80q-9 8 0 16" stroke="#45d7f2" stroke-width="2" fill="none"/>
+    <circle cx="420" cy="70" r="3" fill="#45d7f2"/>
+    <text x="420" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">网页配网</text>
+    <text x="420" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">验证码 · 异步预扫描</text>
+  </g>
+
+  <!-- 04 主按键 -->
+  <g>
+    <circle cx="580" cy="120" r="30" fill="#0d1a24" stroke="#8fa3b0" stroke-width="1.5"/>
+    <circle cx="580" cy="120" r="13" fill="#1b2836" stroke="#b8c6d1" stroke-width="1.5"/>
+    <path d="M580 107v9" stroke="#b8c6d1" stroke-width="2" stroke-linecap="round"/>
+    <text x="580" y="178" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#c9d6de">主按键</text>
+    <text x="580" y="196" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#5f7787">双击切 12/24</text>
+  </g>
+
+  <!-- 底部说明 -->
   <line x1="28" y1="232" x2="612" y2="232" stroke="#1b3340" stroke-width="1"/>
   <text x="28" y="262" font-family="'Courier New',monospace" font-size="12" fill="#8fa3b0">• 无外部 RTC，联网自动校时，断电重连即恢复</text>
   <text x="28" y="288" font-family="'Courier New',monospace" font-size="12" fill="#8fa3b0">• 主按键按下即全局静音 · 长按 8 秒进配网</text>

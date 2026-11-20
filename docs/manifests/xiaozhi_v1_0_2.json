@@ -1,0 +1,14 @@
+{
+  "name": "小米智能闹钟 · 小智 AI 版 v1.0.2",
+  "version": "v1.0.2",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "improv": false,
+      "parts": [
+        { "path": "../firmware/xiaozhi_mi-alarm-tm1652_v2.6.0_brightness_merged.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

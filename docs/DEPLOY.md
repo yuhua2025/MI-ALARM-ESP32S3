@@ -2,7 +2,14 @@
 
 纯静态站点，基于 [esp-web-tools](https://github.com/esphome/esp-web-tools)：用户插上 USB-C，在浏览器里点一下就把固件写进 ESP32-S3。没有后端，固件不经过任何服务器中转，全在本地浏览器与设备之间传输。
 
-页面内容全部由 [`config.json`](./config.json) 驱动（站点信息、产品介绍、固件版本、烧录步骤），改内容不用动 HTML。
+同一块硬件提供两套固件，页面都能烧录：
+
+| 固件线 | 版本 | 镜像大小 | manifest | 说明 |
+| --- | --- | --- | --- | --- |
+| 基础版（Arduino 自研） | v4.8.12 | 16.00 MB | `mi-alarm_v4_8_12.json` | 真人报时、闹铃闪灯、网页配网设置、12/24 切换 |
+| 小智版（小智 AI） | v1.0.2 | 8.54 MB | `xiaozhi_v1_0_2.json` | 中文语音对话、唤醒表情、亮度语音控制、UDP 调试 |
+
+页面内容全部由 [`config.json`](./config.json) 驱动（站点信息、产品介绍、固件版本、烧录步骤），改内容不用动 HTML。`firmwares` 数组的每一项是一张固件卡片，支持 `default: true` 指定默认选中项。
 
 ## 一、开启 GitHub Pages（首次）
 
@@ -45,6 +52,8 @@ docs/
 └── img/                  页面图片（实拍 + SVG 示意）
 ```
 
+`firmware/` 目前有两个 merged 镜像：`XiaoMiClock_v4.8.12_esp32s3_merged.bin`（基础版）和 `xiaozhi_mi-alarm-tm1652_v2.6.0_brightness_merged.bin`（小智版）。两者都是从 `0x0` 开始烧的整盘镜像，分区表不同，**互刷必须擦除 Flash**。
+
 `js/` 里是 esp-web-tools 的完整打包产物，组件内部用 `import()` 动态加载各芯片的 stub flasher，**必须整个目录一起部署**，不能只留 `install-button.js`。
 
 ## 四、发布新版本固件（升级步骤）
@@ -58,8 +67,8 @@ docs/
    ```
 2. **放进固件目录**：把 16MB 的 merged 镜像拷到 `docs/firmware/`。
 3. **算 SHA256**：`shasum -a 256 docs/firmware/新固件.bin`。
-4. **写 manifest**：复制 `manifests/mi-alarm_v4_8_12.json` 为 `mi-alarm_v4_9_0.json`，改 `version` 和 `parts[0].path`（指向新 bin，offset 保持 0）。
-5. **更新 config.json**：在 `firmwares[0].versions` 数组顶部插入新版本条目（version/date/manifest/bin/size/sha256/latest=true/changes），并把旧版本的 `latest` 去掉或删掉。
+4. **写 manifest**：复制对应固件线的模板（基础版用 `manifests/mi-alarm_v4_8_12.json`，小智版用 `manifests/xiaozhi_v1_0_2.json`）为新文件，改 `name`、`version` 和 `parts[0].path`（指向新 bin，offset 保持 0）。
+5. **更新 config.json**：基础版改 `firmwares[0]`，小智版改 `firmwares[1]`；在该条的 `versions` 数组顶部插入新版本条目（version/date/manifest/bin/size/sha256/latest=true/changes），并把旧版本的 `latest` 去掉或删掉。
 6. **破缓存**：把 `config.json` 的 `cacheBust` 改成新日期（如 `2026112002`）。
 7. **本地验证**：`python3 serve.py` 打开页面，确认新版本出现在下拉框、SHA256 显示正确、烧录按钮可用。
 8. 提交推送后等 Pages 更新。
@@ -69,7 +78,7 @@ docs/
 - **浏览器找不到串口**：换数据线（很多线只能充电）。ESP32-S3 用 XIAO 原生 USB-C 一般免驱动；若用外接 USB-TTL，装 CH340/CP2102 驱动。还不行就按住 BOOT、点一下 RESET、松开 BOOT 强制进下载模式。
 - **烧录失败/校验不过**：把 `config.json` 的 `baudRate` 从 921600 依次降到 460800、115200。
 - **iOS 能用吗**：不能，iOS 所有浏览器都不支持 Web Serial，必须用桌面 Chrome / Edge / Firefox。
-- **烧完要做什么**：设备重启后开 `XiaoMiClock` 热点，手机连上配网；因为发布镜像 NVS 已清空，必须重新连一次 Wi-Fi。
+- **烧完要做什么**：基础版重启后开 `XiaoMiClock` 热点，手机连上配网；小智版按语音提示配网。两个发布镜像的 NVS 都已清空，必须重新连一次 Wi-Fi。
 - **能不能保留原配网信息**：技术上有 `app` 镜像可只烧 `0x10000` 保留 NVS，但本页面只发布整盘 merged 镜像（安全起见清空 NVS）。不要对外发布带 Wi-Fi 密码的镜像。
 
 ## 六、页面素材来源

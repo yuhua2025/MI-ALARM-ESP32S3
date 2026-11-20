@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>小米智能闹钟 · ESP32-S3 固件在线烧录</title>
-  <meta name="description" content="小米智能闹钟改装版固件在线烧录：ESP32-S3 + TM1652 数码管 + 小智 AI 语音。插上 USB-C，在浏览器里直接刷入固件，无需安装任何工具。">
+  <meta name="description" content="小米智能闹钟改装版固件在线烧录：ESP32-S3 + TM1652 数码管，基础版（Arduino 自研）与小智 AI 版双固件可选。插上 USB-C，在浏览器里直接刷入固件，无需安装任何工具。">
   <meta name="theme-color" content="#070b0f">
-  <link rel="stylesheet" href="./css/style.css?v=2026112001">
+  <link rel="stylesheet" href="./css/style.css?v=2026112002">
   <!-- esp-web-tools 组件：提供 <esp-web-install-button>，本地自托管，不依赖第三方 CDN -->
   <script type="module" src="./js/install-button.js"></script>
 </head>
@@ -26,7 +26,7 @@
         <div class="term-cmd"><span class="prompt">$</span> web-serial --chip esp32s3 --baud 921600 --no-server</div>
 
         <span class="badge" id="brandBadge">ESP32-S3 / WEB FLASHER</span>
-        <h1 id="siteTitle">小米智能闹钟 · 小智版</h1>
+        <h1 id="siteTitle">小米智能闹钟 · ESP32-S3 改装版</h1>
         <p id="siteSubtitle"></p>
 
         <div class="hero-stats" aria-label="硬件概要">
@@ -41,10 +41,10 @@
           <span class="corner tr" aria-hidden="true"></span>
           <span class="corner bl" aria-hidden="true"></span>
           <span class="corner br" aria-hidden="true"></span>
-          <img src="./img/video-cover.jpg?v=2026112001" alt="改装后的小米智能闹钟：黑色镜面机身，TM1652 数码管显示时间，右下角 WiFi 图标">
+          <img src="./img/video-cover.jpg?v=2026112002" alt="改装后的小米智能闹钟：黑色镜面机身，TM1652 数码管显示时间，右下角 WiFi 图标">
           <div class="art-caption">
             <span>MI-ALARM / ESP32-S3 MOD</span>
-            <span class="art-caption-right">TM1652 · 真人报时 · 小智 AI</span>
+            <span class="art-caption-right">TM1652 · 双固件可选 · 在线烧录</span>
           </div>
         </div>
 
@@ -186,22 +186,22 @@
         <div class="gallery-grid">
           <figure class="shot">
             <div class="shot-bar"><span>video-cover.jpg</span><span>01 / MODDED</span></div>
-            <div class="shot-img"><img src="./img/video-cover.jpg?v=2026112001" loading="lazy" alt="改装完成的小米智能闹钟：TM1652 数码管显示时间，右下角 WiFi 图标"></div>
-            <figcaption><strong>改装成品</strong>换了 ESP32-S3 主控 + TM1652 数码管，真人报时、小智 AI 语音对话。</figcaption>
+            <div class="shot-img"><img src="./img/video-cover.jpg?v=2026112002" loading="lazy" alt="改装完成的小米智能闹钟：TM1652 数码管显示时间，右下角 WiFi 图标"></div>
+            <figcaption><strong>改装成品</strong>换了 ESP32-S3 主控 + TM1652 数码管，可选基础版真人报时或小智版 AI 语音。</figcaption>
           </figure>
           <figure class="shot">
             <div class="shot-bar"><span>device-original.gif</span><span>02 / ORIGINAL</span></div>
-            <div class="shot-img"><img src="./img/device-original.gif?v=2026112001" loading="lazy" alt="改装前的原装小米智能闹钟：黑色镜面机身，屏幕显示小爱同学表情"></div>
+            <div class="shot-img"><img src="./img/device-original.gif?v=2026112002" loading="lazy" alt="改装前的原装小米智能闹钟：黑色镜面机身，屏幕显示小爱同学表情"></div>
             <figcaption><strong>改装前</strong>原装小米闹钟的外观——保留这个外壳，里面换成自制的 ESP32-S3 主板。</figcaption>
           </figure>
           <figure class="shot">
             <div class="shot-bar"><span>display.svg</span><span>03 / DISPLAY</span></div>
-            <div class="shot-img"><img src="./img/gallery-display.svg?v=2026112001" loading="lazy" alt="TM1652 四位数码管显示 21:17 的示意图"></div>
+            <div class="shot-img"><img src="./img/gallery-display.svg?v=2026112002" loading="lazy" alt="TM1652 四位数码管显示 21:17 的示意图"></div>
             <figcaption><strong>数码管</strong>时间 / 验证码共用四位显示；连写两遍 + 3 秒兜底，静态画面不缺笔画。</figcaption>
           </figure>
           <figure class="shot">
             <div class="shot-bar"><span>features.svg</span><span>04 / FEATURES</span></div>
-            <div class="shot-img"><img src="./img/gallery-features.svg?v=2026112001" loading="lazy" alt="功能示意：闹钟、氛围灯、报时、配网页、按键操作"></div>
+            <div class="shot-img"><img src="./img/gallery-features.svg?v=2026112002" loading="lazy" alt="功能示意：闹钟、氛围灯、报时、配网页、按键操作"></div>
             <figcaption><strong>核心功能</strong>整点真人报时、闹铃 + RGB 闪灯、12/24 小时切换、手机网页配网与设置。</figcaption>
           </figure>
         </div>
