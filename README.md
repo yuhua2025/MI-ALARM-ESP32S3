@@ -1,1 +1,95 @@
-IyDlsI/nsbPmmbrog73pl7npkp8gwrcgRVNQMzItUzMg5pS56KOF54mICgrmiorlrrbph4znmoTlsI/nsbPmmbrog73pl7npkp/jgIzmjo/nqbrph43oo4XjgI3vvJrkv53nlZnljp/oo4XplZzpnaLlpJblo7PvvIzmjaLmiJDoh6rnlLvnmoQgRVNQMzItUzMgUUZONTYg6KO454mH5Li75p2/ICsgVE0xNjUyIOWbm+S9jeaVsOeggeeuoSArIEkyUyDlip/mlL4gKyBXUzI4MTJCIOawm+WbtOeBr+OAguWQjOS4gOWdl+ehrOS7tuaPkOS+myoq5Lik5aWX5Zu65Lu2KirvvIzmjInpnIDng6flvZXjgIIKCi0g8J+UpSAqKuWcqOe6v+eDp+W9le+8iOS4jeeUqOijheW3peWFt++8jOa1j+iniOWZqOebtOaOpeWIt++8iSoq77yaPGh0dHBzOi8vbWktYWxhcm0tZXNwMzJzMy41MTUxNjYueHl6Lz4KLSDwn5O6ICoq5pS56KOF5YWo6L+H56iL77yIQiDnq5nop4bpopHvvIkqKu+8mlvjgJDkuIfniannmoblj6/lsI/mmbrjgJHkuYvlsI/nsbPmmbrog73pl7npkp/niYhdKGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbS92aWRlby9CVjFUNHNxNjJFWVQpCi0g8J+nsCAqKuivpue7huWbuuS7tuaWh+aho+S4jui/reS7o+iusOW9lSoq77yaW2BFU1AzMlMzLVBDQi9pbm8vUkVBRE1FLm1kYF0oRVNQMzJTMy1QQ0IvaW5vL1JFQURNRS5tZCkKLSDwn5SMICoq56Gs5Lu25o6l57q/6KGoKirvvJpbYEVTUDMyUzMtUENCL+ehrOS7tuaOpee6v+ihqC5tZGBdKEVTUDMyUzMtUENCL+ehrOS7tuaOpee6v+ihqC5tZCkKCiFb5pS56KOF5ZCO55qE5bCP57Gz5pm66IO96Ze56ZKf77yMVE0xNjUyIOaVsOeggeeuoeaYvuekuuaXtumXtF0oZG9jcy9pbWcvdmlkZW8tY292ZXIuanBnKQoKIyMg5Lik5aWX5Zu65Lu2Cgp8IHwg5Z+656GA54mI77yIQXJkdWlubyDoh6rnoJTvvIkgfCDlsI/mmbrniYjvvIjlsI/mmbogQUnvvIkgfAp8IC0tLSB8IC0tLSB8IC0tLSB8Cnwg54mI5pysIHwgdjQuOC4xMiB8IHYxLjAuMu+8iOWwj+aZuiB2Mi42LjAgKyDmnb/nuqfpgILphY3vvIkgfAp8IOmVnOWDjyB8IDE2IE1CIG1lcmdlZCB8IDguNTQgTUIgbWVyZ2VkIHwKfCDkuLvmiZMgfCDnnJ/kurrmlbTngrnmiqXml7bjgIHpl7npk4Ppl6rnga/jgIHnvZHpobXphY3nvZHkuI7orr7nva4gfCDkuK3mlocgQUkg6K+t6Z+z5a+56K+d44CB5ZSk6YaS5pi+56S66KGo5oOFIHwKfCDnibnoibIgfCAyNCDmrrXnnJ/kurrlvZXpn7PmiqXml7YgKyA2IOautemTg+WjsO+8jOWFqOWcqCBmbGFzaCDmlbDnu4TmnKzlnLDmkq3mlL4gfCDjgIzkvaDlpb3lsI/mmbrjgI3llKTphpLor43jgIHmlbDnoIHnrqHkuq7luqbor63pn7PmjqfliLbjgIFVRFAgMzMzMyDosIPor5Xlj6MgfAp8IOS6pOS6kiB8IOS4u+aMiemUruaMieS4i+WNs+WFqOWxgOmdmemfs++8m+WPjOWHu+WIhyAxMi8yNO+8m+mVv+aMiSA4IOenkui/m+mFjee9kSB8IOivremfs+WvueivnSArIEdQSU8yIOmVv+aMieaBouWkjeWHuuWOgiB8CgrkuKTogIXlhbHnlKjlkIzkuIDlnZfnoazku7bvvIwqKuWIhuWMuuihqOS4jeWQjO+8jOS6kuWIt+W/hemhu+aTpumZpCBGbGFzaCoq44CCCgojIyDln7rnoYDniYjkuLvopoHlip/og70KCi0gKirnnJ/kurrmiqXml7YqKu+8mjI0IOauteaVtOWPpeW9lemfsyArIDYg5q616ZOD5aOw55u05o6l57yW6L+bIGZsYXNoIOaVsOe7hO+8iOe6piAzLjggTULvvInvvIzliLDngrnmnKzlnLDmkq3mlL7vvIzkuI3nlKjmi7zpn7PpopHjgIIKLSAqKumXuemTg+S4juawm+WbtOeBryoq77ya6Ze56ZOD5ZON5pe2IFdTMjgxMkIg5LulIDJIeiDnuqLoibLmmI7nga3mj5DphpLvvIzkuJTml6Dop4bnvZHpobXmsJvlm7Tnga/lvIDlhbPvvJvkuLvmjInplK7mjInkuIvnnqzpl7TlhajlsYDpnZnpn7PvvIjlk43pk4PmjInorr7nva7mjpLotKrnnaHvvIzor5XlkKwv5oql5pe25Y+q5YGc5LiN5o6S77yJ44CCCi0gKirmlbDnoIHnrqHoh6rmhIgqKu+8mlRNMTY1MiDljZXlkJHlhpnjgIHlhpnmrarkuobor7vkuI3lm57mnaXvvIzlm7rku7bnlKjjgIzov57lhpnkuKTpgY0gKyAzIOenkuWFnOW6lemHjeWGmeOAjeWOi+aOiee8uueslOeUu++8m+aXtumXtOeUu+mdouavjyA1MDBtcyDlhpLlj7fnv7vovazkuZ/oh6rmhIjjgIIKLSAqKue9kemhtemFjee9keS4juWuieWFqCoq77ya5omA5pyJ5YaZ5pON5L2c6KaB6L+HIDQg5L2N6aqM6K+B56CB77yM56CB5Y+q5pi+56S65Zyo5pWw56CB566h5LiK44CB5b+F6aG75Li75Yqo54K544CM6I635Y+W6aqM6K+B56CB44CN5omN5Ye644CBMzAg56eS5raI5aSx44CBNjAg56eS5Ya35Y2077yb6YWN572R6aG155So54Ot54K55LiA5byA5bCx5byC5q2l6aKE5omr5o+PICsg57uT5p6c57yT5a2Y77yMV2lGaSDliJfooajnp5Llh7rvvIzmiYvmnLrov57ng63ngrnoh6rliqjlvLnpobXjgIIKLSAqKuaXtumXtCoq77ya5peg5aSW6YOoIFJUQ++8jE5UUCDogZTnvZHmoKHml7bvvJvmlq3nlLXph43ov57oh6rliqjmgaLlpI3jgIIKCiMjIOehrOS7tgoKLSDkuLvmjqfvvJpFU1AzMi1TMyBRRk41NiDoo7jniYfvvIwxNiBNQiBGbGFzaCArIDggTUIgUFNSQU3vvIg0MCBNSHrvvIkKLSDmmL7npLrvvJpUTTE2NTIg5Zub5L2N5pWw56CB566h77yM5Y2V57q/IFNEQe+8iEdQSU8x77yJCi0g6Z+z6aKR77yaTUFYOTgzNTcgSTJTIOWKn+aUvu+8iERJTi9CQ0svTFJDSyA9IEdQSU83LzgvOe+8ie+8m0lDUy00MzQzNCBJMlMg6bqm5YWL6aOO6aKE55WZ77yIR1BJTzQvNS8277yJCi0g54Gv77yaV1MyODEyQiDDlyAyIOS4suiBlO+8iEdQSU8xMO+8iQotIOaMiemUru+8muS4u+aMiemUriBHUElPMO+8iEJPT1TvvInvvIzlia/mjInplK4gR1BJTzLvvIjln7rnoYDniYjplb/mjIkgOCDnp5LmgaLlpI3lh7rljoIgLyDlsI/mmbrniYjplb/mjIkgNSDnp5LvvIkKLSDlrozmlbTlvJXohJrkuI7nlLXmsJTms6jmhI/op4EgW2BFU1AzMlMzLVBDQi/noazku7bmjqXnur/ooagubWRgXShFU1AzMlMzLVBDQi/noazku7bmjqXnur/ooagubWQpCgo+ICoq56Gs5Lu257qi57q/KirvvJpgVkREM1AzX1JUQ2Ag5b+F6aG75o6lIDMuM1bvvIzmgqznqbrkvJrlr7zoh7Toiq/niYfkuI3lkK/liqjjgIFVU0Ig5LiN5p6a5Li+77ybR1BJTzAg5LiK55S15pe25Yir5oyJ5L2P77ybVE0xNjUyIOS4jiBXUzI4MTJCIOaYryA1ViDlmajku7bvvIwzLjNWIOaVsOaNrueUteW5s+WkhOS6jiBWSUgg6L6557yY77ybMzIuNzY4IGtIeiDmmbbmjK8gWDIg5LiN6KaB6KOF44CCCgojIyDng6flvZUKCiMjIyDlnKjnur/ng6flvZXvvIjmjqjojZDvvIkKCuaJk+W8gCA8aHR0cHM6Ly9taS1hbGFybS1lc3AzMnMzLjUxNTE2Ni54eXovPu+8jOmAieWbuuS7tiDihpIg5o+SIFVTQi1DIOKGkiDngrnjgIzov57mjqXorr7lpIflubbng6flvZXjgI3ihpIg5Zyo5rWP6KeI5Zmo5by556qX6YeM6YCJ5Liy5Y+jIOKGkiDli77pgInmk6bpmaQgRmxhc2gg4oaSIOetiSAyfjQg5YiG6ZKf44CC5YWo56iL5Zyo5rWP6KeI5Zmo5pys5Zyw5a6M5oiQ77yM5Zu65Lu25LiN57uP6L+H5pyN5Yqh5Zmo44CCCgrpnIDopoHmoYzpnaLniYggQ2hyb21lIC8gRWRnZSAvIEZpcmVmb3jvvIhpT1Mg5YWo57O75LiN5pSv5oyBIFdlYiBTZXJpYWzvvInvvIxIVFRQUyDorr/pl67jgILng6fnmoTmmK/mlbTnm5ggbWVyZ2VkIOmVnOWDj++8iOWBj+enuyBgMHgwYO+8ie+8jE5WUyDlt7LmuIXnqbrvvIzpppbmrKHlvIDmnLrpnIDopoHph43mlrDphY3nvZHjgILlj5HluIPpobXog4zlkI7nmoTljp/nkIblkozliqDniYjmnKzmraXpqqTop4EgW2Bkb2NzL0RFUExPWS5tZGBdKGRvY3MvREVQTE9ZLm1kKeOAggoKIyMjIOacrOWcsOe8luivkQoKYGBgYmFzaApjZCBFU1AzMlMzLVBDQi9pbm8Kc2ggYnVpbGQuc2ggICAgICMgYXJkdWluby1jbGkg57yW6K+RIOKGkiDlpZHnuqboh6rmo4Ag4oaSIOWvvOWHuiBhcHAvbWVyZ2VkIGJpbiDihpIg5omT5Y2wIFNIQTI1NgpzaCBmbGFzaC5zaCAvZGV2L2N1LnVzYm1vZGVtWFhYWCAgICAgICAgICAjIOWPqueDpyBhcHDvvIzkv53nlZnorr7nva4Kc2ggZmxhc2guc2ggL2Rldi9jdS51c2Jtb2RlbVhYWFggLS1mdWxsICAgIyDlhajniYfng6flvZXvvIzmuIUgTlZTL+iuvue9rgpzaCBmbGFzaC5zaCAvZGV2L2N1LnVzYm1vZGVtWFhYWCAtLXBhcnQgICAjIOW8leWvvCvliIbljLrooagrYXBw77yM5L+d55WZIE5WUwpgYGAKCuS+nei1liBgYXJkdWluby1jbGkgMS4zLjFgIOS4jiBgZXNwMzI6ZXNwMzIgMy4zLjEyYOOAgmBidWlsZC5zaGAg6YeM6KaG55uW5LqGIDE2TUIg5YiG5Yy65bGe5oCn77yIYXBwIDYuNTUgTUIgLyBTUElGRlMgMy41NCBNQu+8ie+8m+S4jeimgeWKoCBgQ0RDT25Cb290PWNkY2DvvIzpgqPkvJrlhbPmjokgVVNCIENEQyDml6Xlv5fjgIJgZmxhc2guc2hgIOW4puiKr+eJh+i6q+S7veagoemqjO+8jOS8muiHquWKqOi3s+i/h+aOpeWcqOWQjOS4gOWPsOeUteiEkeS4iueahOWFtuWugyBVU0Ig6K6+5aSH77yI5L6L5aaCIFpNSyDplK7nm5jvvInjgIIKCiMjIOebruW9lee7k+aehAoKYGBgCi4K4pSc4pSA4pSAIGRvY3MvICAgICAgICAgICAgICAgICAgICAgIOWcqOe6v+eDp+W9leWPkeW4g+mhte+8iEdpdEh1YiBQYWdlcyDmupDnm67lvZXvvIkK4pSCICAg4pSc4pSA4pSAIGluZGV4Lmh0bWwgLyBjb25maWcuanNvbiAvIGNzcyAvIGpzCuKUgiAgIOKUnOKUgOKUgCBmaXJtd2FyZS8gICAgICAgICAgICAgIOS4pOWllyBtZXJnZWQg6ZWc5YOPCuKUgiAgIOKUnOKUgOKUgCBtYW5pZmVzdHMvICAgICAgICAgICAgIGVzcC13ZWItdG9vbHMg5riF5Y2V77yIRVNQMzItUzMgLyBvZmZzZXQgMO+8iQrilIIgICDilJzilIDilIAgaW1nLyAgICAgICAgICAgICAgICAgICDlrp7mi40gKyBTVkcg56S65oSP5Zu+CuKUgiAgIOKUnOKUgOKUgCBERVBMT1kubWQgICAgICAgICAgICAgIOWPkeW4g+mhtee7tOaKpOS4juWKoOeJiOacrOivtOaYjgrilIIgICDilJTilIDilIAgQ05BTUUgICAgICAgICAgICAgICAgICDoh6rlrprkuYnln5/lkI0K4pSc4pSA4pSAIEVTUDMyUzMtUENCLwrilIIgICDilJzilIDilIAg56Gs5Lu25o6l57q/6KGoLm1kCuKUgiAgIOKUlOKUgOKUgCBpbm8vICAgICAgICAgICAgICAgICAgIOWfuuehgOeJiOWbuuS7tua6kOeggeOAgemfs+mikeeUn+aIkOiEmuacrOOAgVJFQURNRQrilJTilIDilIAgZmlybXdhcmVfYmFja3VwLyAgICAgICAgICAg5Y6G5Y+y54mI5pys5b2S5qGj77yI5LiN6L+b5Y+R5biD77yJCmBgYAoKIyMg5a6J5YWo6K+05piOCgrlj5HluIPlh7rljrvnmoQgbWVyZ2VkIOmVnOWDj+mDveWunua1i+i/hyBOVlMg5YiG5Yy65YWoIGAweEZGYO+8jOS4jeWQqyBXaUZpIOWvhueggeaIlui0puWPt+WvhumSpeOAguWfuuehgOeJiOe9kemhteeahOWGmeaTjeS9nOmcgOimgeaVsOeggeeuoemqjOivgeegge+8jOS8muivnSAxMjAg56eS5peg6K+35rGC5Zue5pS277yb5LuOIDE5Mi4xNjguNC54IOmFjee9keeDreeCuei/m+adpeWFjemqjOivge+8jOS9nOS4uuayoeacieaYvuekuuWxj+aXtueahOmAg+eUn+mXqOOAgioq5q6L5L2Z6aOO6ZmpKirvvJrlvZPliY3lhpnmk43kvZzku43mmK8gR0VUICsgQ29va2ll77yM5peg5rOV5a6M5YWo5oyh5L2P6aG257qn5a+86Iiq6Kem5Y+R55qE6Leo56uZ6K+35rGC77yM5ZCO57ut6K6h5YiS5pS5IFBPU1QgKyDmoKHpqowgYFNlYy1GZXRjaC1TaXRlYOOAggoKIyMg5bey55+l6ZmQ5Yi2CgotIOWPquaUr+aMgSAyLjQgR0h6IFdpRmnvvIhFU1AzMiDkuI3mlK/mjIEgNSBHSHrvvInjgIIKLSDmsqHmnInlpJbpg6ggUlRD77yM5pat55S15ZCO6IGU572R5Lya6YeN5paw5qCh5pe244CCCi0g6Ze56ZKf5pyA5aSaIDUg57uE44CCCi0g5Zyo57q/54On5b2V6ZyA5qGM6Z2i5rWP6KeI5ZmoICsgSFRUUFPvvJsxNiBNQiDplZzlg4/kuIvovb3liqDng6flvZXnuqYgMn40IOWIhumSn++8jOacn+mXtOWIq+aLlOe6v+OAggoKIyMg6Ie06LCiCgrlnKjnur/ng6flvZXnlLEgW2VzcC13ZWItdG9vbHNdKGh0dHBzOi8vZ2l0aHViLmNvbS9lc3Bob21lL2VzcC13ZWItdG9vbHMpIOaPkOS+m+a1j+iniOWZqOerryBXZWIgU2VyaWFsIOiDveWKm++8m+Wwj+aZuueJiOWfuuS6jiBbeGlhb3poaS1lc3AzMl0oaHR0cHM6Ly9naXRodWIuY29tLzc4L3hpYW96aGktZXNwMzIpIHYyLjYuMOOAggoKTWFkZSBieSBEYXl1Lgo=
+# 小米智能闹钟 · ESP32-S3 改装版
+
+把家里的小米智能闹钟「掏空重装」：保留原装镜面外壳，换成自画的 ESP32-S3 QFN56 裸片主板 + TM1652 四位数码管 + I2S 功放 + WS2812B 氛围灯。同一块硬件提供**两套固件**，按需烧录。
+
+- 🔥 **在线烧录（不用装工具，浏览器直接刷）**：<https://mi-alarm-esp32s3.515166.xyz/>
+- 📺 **改装全过程（B 站视频）**：[【万物皆可小智】之小米智能闹钟版](https://www.bilibili.com/video/BV1T4sq62EYT)
+- 🧰 **详细固件文档与迭代记录**：[`ESP32S3-PCB/ino/README.md`](ESP32S3-PCB/ino/README.md)
+- 🔌 **硬件接线表**：[`ESP32S3-PCB/硬件接线表.md`](ESP32S3-PCB/硬件接线表.md)
+
+![改装后的小米智能闹钟，TM1652 数码管显示时间](docs/img/video-cover.jpg)
+
+## 两套固件
+
+| | 基础版（Arduino 自研） | 小智版（小智 AI） |
+| --- | --- | --- |
+| 版本 | v4.8.12 | v1.0.2（小智 v2.6.0 + 板级适配） |
+| 镜像 | 16 MB merged | 8.54 MB merged |
+| 主打 | 真人整点报时、闹铃闪灯、网页配网与设置 | 中文 AI 语音对话、唤醒显示表情 |
+| 特色 | 24 段真人录音报时 + 6 段铃声，全在 flash 数组本地播放 | 「你好小智」唤醒词、数码管亮度语音控制、UDP 3333 调试口 |
+| 交互 | 主按键按下即全局静音；双击切 12/24；长按 8 秒进配网 | 语音对话 + GPIO2 长按恢复出厂 |
+
+两者共用同一块硬件，**分区表不同，互刷必须擦除 Flash**。
+
+## 基础版主要功能
+
+- **真人报时**：24 段整句录音 + 6 段铃声直接编进 flash 数组（约 3.8 MB），到点本地播放，不用拼音频。
+- **闹铃与氛围灯**：闹铃响时 WS2812B 以 2Hz 红色明灭提醒，且无视网页氛围灯开关；主按键按下瞬间全局静音（响铃按设置排贪睡，试听/报时只停不排）。
+- **数码管自愈**：TM1652 单向写、写歪了读不回来，固件用「连写两遍 + 3 秒兜底重写」压掉缺笔画；时间画面每 500ms 冒号翻转也自愈。
+- **网页配网与安全**：所有写操作要过 4 位验证码，码只显示在数码管上、必须主动点「获取验证码」才出、30 秒消失、60 秒冷却；配网页用热点一开就异步预扫描 + 结果缓存，WiFi 列表秒出，手机连热点自动弹页。
+- **时间**：无外部 RTC，NTP 联网校时；断电重连自动恢复。
+
+## 硬件
+
+- 主控：ESP32-S3 QFN56 裸片，16 MB Flash + 8 MB PSRAM（40 MHz）
+- 显示：TM1652 四位数码管，单线 SDA（GPIO1）
+- 音频：MAX98357 I2S 功放（DIN/BCK/LRCK = GPIO7/8/9）；ICS-43434 I2S 麦克风预留（GPIO4/5/6）
+- 灯：WS2812B × 2 串联（GPIO10）
+- 按键：主按键 GPIO0（BOOT），副按键 GPIO2（基础版长按 8 秒恢复出厂 / 小智版长按 5 秒）
+- 完整引脚与电气注意见 [`ESP32S3-PCB/硬件接线表.md`](ESP32S3-PCB/硬件接线表.md)
+
+> **硬件红线**：`VDD3P3_RTC` 必须接 3.3V，悬空会导致芯片不启动、USB 不枚举；GPIO0 上电时别按住；TM1652 与 WS2812B 是 5V 器件，3.3V 数据电平处于 VIH 边缘；32.768 kHz 晶振 X2 不要装。
+
+## 烧录
+
+### 在线烧录（推荐）
+
+打开 <https://mi-alarm-esp32s3.515166.xyz/>，选固件 → 插 USB-C → 点「连接设备并烧录」→ 在浏览器弹窗里选串口 → 勾选擦除 Flash → 等 2~4 分钟。全程在浏览器本地完成，固件不经过服务器。
+
+需要桌面版 Chrome / Edge / Firefox（iOS 全系不支持 Web Serial），HTTPS 访问。烧的是整盘 merged 镜像（偏移 `0x0`），NVS 已清空，首次开机需要重新配网。发布页背后的原理和加版本步骤见 [`docs/DEPLOY.md`](docs/DEPLOY.md)。
+
+### 本地编译
+
+```bash
+cd ESP32S3-PCB/ino
+sh build.sh     # arduino-cli 编译 → 契约自检 → 导出 app/merged bin → 打印 SHA256
+sh flash.sh /dev/cu.usbmodemXXXX          # 只烧 app，保留设置
+sh flash.sh /dev/cu.usbmodemXXXX --full   # 全片烧录，清 NVS/设置
+sh flash.sh /dev/cu.usbmodemXXXX --part   # 引导+分区表+app，保留 NVS
+```
+
+依赖 `arduino-cli 1.3.1` 与 `esp32:esp32 3.3.12`。`build.sh` 里覆盖了 16MB 分区属性（app 6.55 MB / SPIFFS 3.54 MB）；不要加 `CDCOnBoot=cdc`，那会关掉 USB CDC 日志。`flash.sh` 带芯片身份校验，会自动跳过接在同一台电脑上的其它 USB 设备（例如 ZMK 键盘）。
+
+## 目录结构
+
+```
+.
+├── docs/                      在线烧录发布页（GitHub Pages 源目录）
+│   ├── index.html / config.json / css / js
+│   ├── firmware/              两套 merged 镜像
+│   ├── manifests/             esp-web-tools 清单（ESP32-S3 / offset 0）
+│   ├── img/                   实拍 + SVG 示意图
+│   ├── DEPLOY.md              发布页维护与加版本说明
+│   └── CNAME                  自定义域名
+├── ESP32S3-PCB/
+│   ├── 硬件接线表.md
+│   └── ino/                   基础版固件源码、音频生成脚本、README
+└── firmware_backup/           历史版本归档（不进发布）
+```
+
+## 安全说明
+
+发布出去的 merged 镜像都实测过 NVS 分区全 `0xFF`，不含 WiFi 密码或账号密钥。基础版网页的写操作需要数码管验证码，会话 120 秒无请求回收；从 192.168.4.x 配网热点进来免验证，作为没有显示屏时的逃生门。**残余风险**：当前写操作仍是 GET + Cookie，无法完全挡住顶级导航触发的跨站请求，后续计划改 POST + 校验 `Sec-Fetch-Site`。
+
+## 已知限制
+
+- 只支持 2.4 GHz WiFi（ESP32 不支持 5 GHz）。
+- 没有外部 RTC，断电后联网会重新校时。
+- 闹钟最多 5 组。
+- 在线烧录需桌面浏览器 + HTTPS；16 MB 镜像下载加烧录约 2~4 分钟，期间别拔线。
+
+## 致谢
+
+在线烧录由 [esp-web-tools](https://github.com/esphome/esp-web-tools) 提供浏览器端 Web Serial 能力；小智版基于 [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) v2.6.0。
+
+Made by Dayu.
